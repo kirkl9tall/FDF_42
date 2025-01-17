@@ -47,30 +47,26 @@ int main (void)
 		free(a);
 	}
     bigo = ft_split(loly,'\n');
-
     bigloly = malloc (q * sizeof(int*));
-    printf("%s\n",bigo[0]);
     int f = 0;
     int words;
-
     int index = 0;
     int at = 0;
     int pars = 0;
     while (pars < q)
-        {
+    {
         words = checker_map(bigo[pars]);
         bigloly[pars] = malloc(words*(sizeof(int)));
         f = 0;
+        index = 0;
         while  (bigo[pars][f])
         {
             if (bigo[pars][f] == ' ') 
                 f++;
-
             else if (bigo[pars][f] == '-')
             {
                 at = ft_atoi(bigo[pars],f); 
                 bigloly[pars][index] = at;
-                //printf("minus %d\n",at);
                 index++;
                 while (bigo[pars][f] != ' ')
                     f++;    
@@ -78,7 +74,6 @@ int main (void)
             else if (bigo[pars][f] <= '9' && bigo[pars][f] >='0' )
             {
                 at = ft_atoi(bigo[pars],f); 
-               // printf("number %d\n",at);
                 bigloly[pars][index] = at;
                 index++;
                 while (bigo[pars][f] != ' ' && bigo[pars][f] != '\0' )
@@ -88,14 +83,16 @@ int main (void)
         }
         pars++;
     }
-    int t = 0;
-    while (t <= 9)
+    int c = 0;
+    while (c < 9)
     {
-        printf("%d\n",bigloly[0][t]);
-        t++;
+        int t = 0;
+        while (t <= 9)
+        {
+            printf("%d ",bigloly[c][t]);
+            t++;
+        }
+        c++;
+        printf("\n");
     }
-   // printf("%ld\n", sizeof((bigloly[0]) ) / sizeof(bigloly[0][0]));
-
-    // printf("%d\n",at);
-	close(i);
 }

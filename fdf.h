@@ -7,6 +7,14 @@
 # include <unistd.h>
 # include <stdio.h>
 
+typedef struct s_map
+{
+    int x;
+    int y;
+    int z;
+    unsigned int colors;
+}   t_map;
+
 # ifndef BUFFER_SIZE
 # define BUFFER_SIZE 5
 # endif

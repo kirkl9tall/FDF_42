@@ -15,6 +15,12 @@ typedef struct s_map
     unsigned int colors;
 }   t_map;
 
+typedef struct s_dim
+{
+    int widht;
+    int height;
+}   t_dim;
+
 # ifndef BUFFER_SIZE
 # define BUFFER_SIZE 5
 # endif

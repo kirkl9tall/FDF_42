@@ -1,5 +1,7 @@
 #include "fdf.h"
 #include "minilibx-linux/mlx.h"
+#include <math.h>
+
 
 unsigned int  char_tohex (char *s,int index)
 {
@@ -51,6 +53,20 @@ size_t	checker_map(char *str)
         }
     }
 	return (count);
+}
+/////////////////////////////////////////////////// draw line.// ///////////////////////
+
+void draw_line(void *mlx_ptr, void *win_ptr, int x1, int y1, int x2, int y2, int color) {
+    int dx = abs(x2 - x1), dy = abs(y2 - y1);
+    int sx = (x1 < x2) ? 1 : -1, sy = (y1 < y2) ? 1 : -1;
+    int err = dx - dy;
+
+    while (x1 != x2 || y1 != y2) {
+        mlx_pixel_put(mlx_ptr, win_ptr, x1, y1, color);
+        int e2 = 2 * err;
+        if (e2 > -dy) { err -= dy; x1 += sx; }
+        if (e2 < dx) { err += dx; y1 += sy; }
+    }
 }
 
 int main (int argc ,char *argv[])
@@ -126,7 +142,7 @@ int main (int argc ,char *argv[])
     while (c < pars)
     {
         int t = 0;
-        while (t <= 9)
+        while (t < words)
         {
             printf("%d ",bigloly[c][t].z);
             t++;
@@ -136,10 +152,53 @@ int main (int argc ,char *argv[])
     }
     void * win_ptr;
     void * mlx_ptr;
+    void * img_ptr;
+    int x_w = 1000;
+    int y_w = 800;
+
 
     mlx_ptr = mlx_init();
-    win_ptr = mlx_new_window(mlx_ptr,700,700,"test map !");
+    win_ptr = mlx_new_window(mlx_ptr,x_w,y_w,"test map !");
+    //img_ptr = mlx_new_image (mlx_ptr, dims.widht, dims.height );
+
+   // mlx_get_data_addr ( void *img_ptr, int *bits_per_pixel, int *size_line, int *endian );
+    //mlx_put_image_to_window ( mlx_ptr, win_ptr, img_ptr, 300, 300);
+
+    t_scale scale;
+
+    scale.x = x_w / dims.widht;   
+    scale.y = y_w / dims.height;
+
+    if (scale.x < scale.y) {
+        scale.y = scale.x;  
+    } 
+    else
+    {
+        scale.x = scale.y;
+    }
+    for (int i = 1; i <= dims.height; i++) {
+    for (int j = 1; j < dims.widht; j++) 
+    {
+
+        int x = j * scale.x;
+        int y = i * scale.y; 
+        mlx_pixel_put(mlx_ptr, win_ptr, x, y, 0xFFFFFF);
+        //////////////////////////////// a faire solo /////////////////////////////
+        if (j + 1 < dims.widht) {
+            int x2 = (j + 1) * scale.x;
+            int y2 = i * scale.x;
+            draw_line(mlx_ptr, win_ptr, x, y, x2, y2, 0xFFFFFF); // Draw horizontal line
+        }
+
+        // Connect to the bottom neighbor
+        if (i + 1 < dims.height) {
+            int x2 = j * scale.x;
+            int y2 = (i + 1) * scale.y;
+            draw_line(mlx_ptr, win_ptr, x, y, x2, y2, 0xFFFFFF); // Draw vertical line
+        }
+    }
+}
+//////////////////////////////////////////////////////////////////////////////
 
     mlx_loop(mlx_ptr);
-
 }

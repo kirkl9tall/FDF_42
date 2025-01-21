@@ -144,7 +144,7 @@ int main (int argc ,char *argv[])
         int t = 0;
         while (t < words)
         {
-            printf("%d ",bigloly[c][t].z);
+            printf("%d ",bigloly[c][t].colors);
             t++;
         }
         c++;

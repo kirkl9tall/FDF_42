@@ -8,6 +8,30 @@
 # include <stdio.h>
 #include <stdbool.h>
 
+typedef struct  s_pos
+{
+    int x;
+    int y;
+}   t_pos;
+typedef struct s_step
+{
+    int x;
+    int y;
+}   t_step;
+typedef struct s_diff
+{
+    int  x;
+    int y;
+}t_diff;
+
+typedef struct s_line {
+    t_pos start; 
+    t_pos end;   
+    t_diff diff; 
+    t_step step; 
+    int p;
+} t_line;
+
 typedef struct s_map
 {
     int x;

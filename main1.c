@@ -3,31 +3,6 @@
 #include <math.h>
 #include <stdio.h>
 
-
-typedef struct  s_pos
-{
-    int x;
-    int y;
-}   t_pos;
-typedef struct s_step
-{
-    int x;
-    int y;
-}   t_step;
-typedef struct s_diff
-{
-    int  x;
-    int y;
-}t_diff;
-
-typedef struct s_line {
-    t_pos start; 
-    t_pos end;   
-    t_diff diff; 
-    t_step step; 
-    int p;
-} t_line;
-
 t_step choice (t_pos start, t_pos end)
 {
         t_step guid;
@@ -99,7 +74,7 @@ void draw_myline (void *win_ptr, void *mlx_ptr ,int x1,int y1,int x2,int y2,int 
 
 int main(void)
 {
-     void * win_ptr;
+    void * win_ptr;
     void * mlx_ptr;
     void * img_ptr;
     int x_w = 1000;

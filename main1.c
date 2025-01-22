@@ -24,22 +24,23 @@ t_step choice (t_pos start, t_pos end)
         t_step guid;
 
         printf("start.x %d    start.y   %d   end.x  %d end.y   %d \n", start.x, start.y, end.x, end.y);
+        guid.y= 0; guid.x= 0;
+        if  (start.y > end.y)
+            guid.y = -1;
+        else if (end.y > start.y)
+            guid.y = 1;
 
         if  (start.x > end.x)
             guid.x = -1;
         else if (end.x > start.x)
             guid.x = 1;
         printf("guid.x ==  %d \n ",guid.x);
-        if  (start.y > end.y)
-            guid.y = -1;
-        else if (end.y > start.y)
-            guid.y = 1;
-        printf("y   %d ",guid.y);
+        printf("guid.y == %d   \n",guid.y);
     return (guid);
 }
 void initial_step(void *mlx_ptr,void *win_ptr,t_pos start,int p,t_step step,int color)
 {
-    if (p<0)
+    if (p < 0)
      start.x += step.x;
      else 
      {
@@ -76,7 +77,8 @@ void draw_myline (void *win_ptr, void *mlx_ptr ,int x1,int y1,int x2,int y2,int 
     d.y = abs(end.y - start.y);
     step = choice(start,end);
     p = (2*d.y) - d.x;
-    initial_step(win_ptr,mlx_ptr,start,p,step,color);
+    mlx_pixel_put(mlx_ptr, win_ptr, start.x, start.y, color);
+    //initial_step(win_ptr,mlx_ptr,start,p,step,color);
     while ((start.x != end.x) && (start.y != end.y))
     {
         if (p < 0)

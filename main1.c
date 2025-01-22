@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 
+
 typedef struct  s_pos
 {
     int x;
@@ -18,6 +19,14 @@ typedef struct s_diff
     int  x;
     int y;
 }t_diff;
+
+typedef struct s_line {
+    t_pos start; 
+    t_pos end;   
+    t_diff diff; 
+    t_step step; 
+    int p;
+} t_line;
 
 t_step choice (t_pos start, t_pos end)
 {
@@ -49,50 +58,45 @@ void initial_step(void *mlx_ptr,void *win_ptr,t_pos start,int p,t_step step,int 
      }
      mlx_pixel_put(mlx_ptr,win_ptr,start.x,start.y,color);
 }
-void nega_decision(void *mlx_ptr,void *win_ptr,t_pos start,t_step step,int color)
+void nega_decision(void *mlx_ptr,void *win_ptr,t_line line,int color)
 {
-    start.x += step.x;
-    mlx_pixel_put(mlx_ptr,win_ptr,start.x,start.y,color);
+    line.start.x += line.step.x;
+    mlx_pixel_put(mlx_ptr,win_ptr,line.start.x,line.start.y,color);
 }
-void posi_decision(void *mlx_ptr,void *win_ptr,t_pos start,t_step step,int color)
+void posi_decision(void *mlx_ptr,void *win_ptr,t_line line,int color)
 {
-    start.x += step.x;
-    start.y+=step.y;
-    mlx_pixel_put(mlx_ptr,win_ptr,start.x,start.y,color);
+    line.start.x += line.step.x;
+    line.start.y+=line.step.y;
+    mlx_pixel_put(mlx_ptr,win_ptr,line.start.x,line.start.y,color);
 }
 void draw_myline (void *win_ptr, void *mlx_ptr ,int x1,int y1,int x2,int y2,int color)
 {
-    t_pos start;
-    t_pos end;
-    t_step step;
-    t_diff d;
-    int p;
+    t_line line;
 
-    start.x = x1;
-    start.y = y1;
-    end.x = x2;
-    end.y = y2;
-    
-    d.x = abs(end.x - start.x);
-    d.y = abs(end.y - start.y);
-    step = choice(start,end);
-    p = (2*d.y) - d.x;
-    mlx_pixel_put(mlx_ptr, win_ptr, start.x, start.y, color);
-    //initial_step(win_ptr,mlx_ptr,start,p,step,color);
-    while ((start.x != end.x) && (start.y != end.y))
-    {
-        if (p < 0)
+    line.start.x = x1;
+    line.start.y = y1;
+    line.end.x = x2;
+    line.end.y = y2;
+    line.diff.x = abs(line.end.x - line.start.x);
+    line.diff.y = abs(line.end.y - line.start.y);
+    line.step = choice(line.start,line.end);
+    line.p = (2*line.diff.y) - line.diff.x;
+    mlx_pixel_put(mlx_ptr, win_ptr, line.start.x, line.start.y, color);
+        while (line.start.x != line.end.x || line.start.y != line.end.y) 
         {
-            nega_decision(win_ptr,mlx_ptr,start,step,color);
-            p = p + 2*d.y;
+            if (line.p < 0) {
+                line.start.x += line.step.x;
+                mlx_pixel_put(mlx_ptr, win_ptr, line.start.x, line.start.y, color);
+                line.p += 2 * line.diff.y;
+            } else {
+                line.start.x += line.step.x;
+                line.start.y += line.step.y;
+                mlx_pixel_put(mlx_ptr, win_ptr, line.start.x, line.start.y, color);
+                line.p += (2 * line.diff.y) - (2 * line.diff.x);
+            }
         }
-        else
-        { 
-            posi_decision(win_ptr,mlx_ptr,start,step,color);
-            p += p +((2*d.y)- (2*d.x));
-        }
-    }
 }
+
 int main(void)
 {
      void * win_ptr;

@@ -38,6 +38,8 @@ typedef struct s_map
     int y;
     int z;
     unsigned int colors;
+    int xc;
+    int yc;
 }   t_map;
 
 typedef struct s_dim
@@ -72,7 +74,7 @@ void nega_decision(void *mlx_ptr,void *win_ptr,t_line line,int color);
 void posi_decision(void *mlx_ptr,void *win_ptr,t_line line,int color);
 void draw_myline (void *win_ptr, void *mlx_ptr ,int x1,int y1,int x2,int y2,int color);
 /// ////////////
-
-void draw_line(void *mlx_ptr, void *win_ptr, int x1, int y1, int x2, int y2, int color);
-
+unsigned int  char_tohex (char *s,int index);
+size_t	checker_map(char *str);
+int parssing (int fd);
 #endif

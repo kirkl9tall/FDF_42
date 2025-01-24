@@ -8,6 +8,13 @@
 # include <stdio.h>
 #include <stdbool.h>
 
+typedef struct s_map
+{
+    int x;
+    int y;
+    int z;
+    unsigned int colors;
+}   t_map;
 typedef struct  s_pos
 {
     int x;
@@ -32,21 +39,17 @@ typedef struct s_line {
     int p;
 } t_line;
 
-typedef struct s_map
-{
-    int x;
-    int y;
-    int z;
-    unsigned int colors;
-    int xc;
-    int yc;
-}   t_map;
 
 typedef struct s_dim
 {
-    int widht;
+    int width;
     int height;
 }   t_dim;
+typedef struct s_map_p
+{
+    t_map **map;
+    t_dim dims; 
+}   t_map_p;
 
 typedef struct s_scale
 {
@@ -76,5 +79,5 @@ void draw_myline (void *win_ptr, void *mlx_ptr ,int x1,int y1,int x2,int y2,int 
 /// ////////////
 unsigned int  char_tohex (char *s,int index);
 size_t	checker_map(char *str);
-int parssing (int fd);
+t_map_p parssing (int fd);
 #endif

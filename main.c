@@ -1,16 +1,21 @@
 #include "fdf.h"
 #include "minilibx-linux/mlx.h"
 #include <math.h>
-t_map  isometric(int x, int y, t_map point)
+
+t_map  isometric(int x, int y, int z)
 {
+t_map point;
+
  point.x = (x - y) * cos(0.523599);
- point.y = (x + y) * sin(0.523599) - point.z;
+ point.y = (x + y) * sin(0.523599) - z;
+ point.z = z;
  return (point);
 }
 
-int main ()
+int main (int argc , char **argv)
 {
-
+    t_map_p s;
+    t_map_p scal;
     void * win_ptr;
     void * mlx_ptr;
     void * img_ptr;
@@ -21,46 +26,46 @@ int main ()
     mlx_ptr = mlx_init();
     win_ptr = mlx_new_window(mlx_ptr,x_w,y_w,"test map !");
 
+    s = parssing(open("10-2.fdf", O_RDONLY , 0666));
+
     t_scale scale;
 
-    scale.x = x_w / dims.widht;   
-    scale.y = y_w / dims.height;
+    scale.x = x_w / s.dims.width;
+    scale.y = y_w / s.dims.height;
 
     if (scale.x < scale.y) {
-        scale.y = scale.x;  
-    } 
+        scale.y = scale.x;
+    }
     else
     {
         scale.x = scale.y;
     }
-    t_map lala;
 
-    for (int i = 1; i <= dims.height -1; i++) {
-    for (int j = 1; j <= dims.widht -1; j++) 
+    for (int i = 0; i < s.dims.height; i++)
     {
-        bigloly[i][j].x = j * scale.x;
-        bigloly[i][j].y = i * scale.y; 
-        //lala = isometric(bigloly[i][j].x, bigloly[i][j].y, bigloly[i][j]);
-        mlx_pixel_put(mlx_ptr, win_ptr, bigloly[i][j].x, bigloly[i][j].y, 0xFFFFFF);
+        for (int j = 0; j < s.dims.width; j++)
+        {
 
-        //////////////////////////// a faire solo /////////////////////////////
-        if (j + 1 < dims.widht) {
-            int x2 = (j + 1) * scale.x;
-            int y2 = i * scale.x;
-
-            draw_myline(win_ptr,mlx_ptr,bigloly[i][j].x,bigloly[i][j].y,x2,y2,0xFFFFFF); // Draw horizontal line
-        }
-
-        // Connect to the bottom neighbor
-        if (i + 1 < dims.height) {
-            int x2 = j * scale.x;
-            int y2 = (i + 1) * scale.y;
-            draw_myline(win_ptr,mlx_ptr,bigloly[i][j].x,bigloly[i][j].y,x2,y2,0xFFFFFF); // Draw vertical line
+            s.map[i][j].x *= scale.x;
+            s.map[i][j].y *= scale.y;
+            s.map[i][j] = isometric(s.map[i][j].x,s.map[i][j].y,s.map[i][j].z);
+            mlx_pixel_put(mlx_ptr,win_ptr,s.map[i][j].x,s.map[i][j].y,0xFFFFFF);
         }
     }
-}
-//////////////////////////////////////////////////////////////////////////////
-
+    for (int i = 0; i < s.dims.height; i++)
+    {
+        for (int j = 0; j < s.dims.width; j++)
+        {
+            if (j + 1 < s.dims.width)
+            {
+                draw_myline(win_ptr,mlx_ptr,s.map[i][j].x,s.map[i][j].y,s.map[i][j + 1].x,s.map[i][j + 1].y,0xFFFFFF);
+            }
+            if (i + 1 < s.dims.height)
+            {
+                draw_myline(win_ptr,mlx_ptr,s.map[i][j].x,s.map[i][j].y,s.map[i + 1][j].x,s.map[i + 1][j].y,0xFFFFFF);
+            }
+        }
+    }
     mlx_loop(mlx_ptr);
 
 }

@@ -54,11 +54,14 @@ size_t	checker_map(char *str)
 	return (count);
 }
 ///////////////////////////////////////////////////  isometric projection ////////////////////////////////////
-int parssing (int fd)
+t_map_p parssing (int fd)
 {
-	// int i = open("10-4.fdf", O_RDONLY , 0666);
-        if (fd < 0) return 1;
-	t_map **bigloly;
+    if (fd == -1)
+    {
+        printf("Error\n");
+        exit(1);
+    }
+	t_map_p bigloly;
     char *loly;
     char **bigo;
     int q = 0;
@@ -75,7 +78,7 @@ int parssing (int fd)
     bigo = ft_split(loly,'\n');
 
     ////////////////////////// create a 2 arrays of  the struct that have x,y,z,colors ////////////////////////////////////
-    bigloly = malloc (q * sizeof(t_map*));
+    bigloly.map = malloc (q * sizeof(t_map_p*));
     int f = 0;
     int words;
     int index = 0;
@@ -86,7 +89,7 @@ int parssing (int fd)
     while (pars < q)
     {
         words = checker_map(bigo[pars]);
-        bigloly[pars] = malloc(words*(sizeof(t_map)));
+        bigloly.map[pars] = malloc(words*(sizeof(t_map_p)));
         f = 0;
         index = 0;
         unsigned int color = 0;
@@ -97,16 +100,16 @@ int parssing (int fd)
             else if (bigo[pars][f] == '-' || bigo[pars][f] <= '9' && bigo[pars][f] >='0' )
             {
                 at = ft_atoi(bigo[pars],f); 
-                bigloly[pars][index].z = at;
-                bigloly[pars][index].x = index;
-                bigloly[pars][index].y = pars;
-                bigloly[pars][index].colors = 0x000000;
+                bigloly.map[pars][index].z = at;
+                bigloly.map[pars][index].x = index;
+                bigloly.map[pars][index].y = pars;
+                bigloly.map[pars][index].colors = 0x000000;
                 while (bigo[pars][f] >= '0'  && bigo[pars][f] <= '9')
                     f++;
                 if (bigo[pars][f] == ',')
                 {
                     f++;
-                    bigloly[pars][index].colors = char_tohex(bigo[pars],f);
+                    bigloly.map[pars][index].colors = char_tohex(bigo[pars],f);
                 }
                 index++;
                 while (bigo[pars][f] != ' ' && bigo[pars][f] != '\0')
@@ -117,23 +120,8 @@ int parssing (int fd)
         pars++;
     }
 
-    ////////////////////////////////////////// struct dimensions  done ////////////////////////////////////////////
-    t_dim dims;
-    dims.height = pars;
-    dims.widht = words;
-///////////////////////////////////////// open a window   of mlx--- ///////////////////////////////////////////////////////
-
-    int c = 0;
-    while (c < pars)
-    {
-        int t = 0;
-        while (t < words)
-        {
-            printf("%d ",bigloly[c][t].colors);
-            t++;
-        }
-        c++;
-        printf("\n");
-    }
-
+    bigloly.dims.height = pars;
+    bigloly.dims.width = words;
+    
+    return (bigloly);
 }

@@ -71,3 +71,31 @@ void draw_myline (void *win_ptr, void *mlx_ptr ,int x1,int y1,int x2,int y2,int 
             }
         }
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+void put_pixel_to_img(t_img *img, int x, int y, int color)
+{
+    if (x < 0 || y < 0 || x >= 1000 || y >= 800)
+        return; 
+
+    int pos = (y * img->size_line) + (x * (img->bits_per_pixel / 8));
+    *(int *)(img->img_data + pos) = color;
+}
+
+void draw_mylinee(t_img *img, int x1, int y1, int x2, int y2, int color)
+{
+    int dx = abs(x2 - x1);
+    int dy = abs(y2 - y1);
+    int sx = (x1 < x2) ? 1 : -1;
+    int sy = (y1 < y2) ? 1 : -1;
+    int err = dx - dy;
+
+    while (x1 != x2 || y1 != y2)
+    {
+        put_pixel_to_img(img, x1, y1, color);
+
+        int e2 = 2 * err;
+        if (e2 > -dy) { err -= dy; x1 += sx; }
+        if (e2 < dx) { err += dx; y1 += sy; }
+    }
+}

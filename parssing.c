@@ -119,9 +119,7 @@ t_map_p parssing (int fd)
         }
         pars++;
     }
-
     bigloly.dims.height = pars;
     bigloly.dims.width = words;
-    
     return (bigloly);
 }

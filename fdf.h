@@ -8,6 +8,14 @@
 # include <stdio.h>
 #include <stdbool.h>
 
+typedef struct s_img
+{
+    void    *img_ptr;       
+    char    *img_data;      
+    int     bits_per_pixel; 
+    int     size_line;     
+    int     endian;         
+} t_img;
 typedef struct s_map
 {
     int x;
@@ -76,8 +84,13 @@ void initial_step(void *mlx_ptr,void *win_ptr,t_pos start,int p,t_step step,int 
 void nega_decision(void *mlx_ptr,void *win_ptr,t_line line,int color);
 void posi_decision(void *mlx_ptr,void *win_ptr,t_line line,int color);
 void draw_myline (void *win_ptr, void *mlx_ptr ,int x1,int y1,int x2,int y2,int color);
+///////////////////./././/?////////////////////////////////////////////////////////
+
+void put_pixel_to_img(t_img *img, int x, int y, int color);
+void draw_mylinee(t_img *img, int x1, int y1, int x2, int y2, int color);
 /// ////////////
 unsigned int  char_tohex (char *s,int index);
 size_t	checker_map(char *str);
 t_map_p parssing (int fd);
+
 #endif

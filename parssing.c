@@ -51,6 +51,7 @@ size_t	checker_map(char *str)
             x++;
         }
     }
+        printf("count = %zu\n",count);
 	return (count);
 }
 ///////////////////////////////////////////////////  isometric projection ////////////////////////////////////
@@ -66,7 +67,7 @@ t_map_p parssing (int fd)
     char **bigo;
     int q = 0;
 	char *a;
-    loly = malloc (4000);
+    loly = ft_strdup("");
     ////////////////////////////////////// read from  a file   and calculate  the  height ////////////////////////////////////////
  	while((a = get_next_line(fd)) != NULL)
 	{
@@ -84,7 +85,6 @@ t_map_p parssing (int fd)
     int index = 0;
     int at = 0;
     int pars = 0;
-
     /////////////////////////////////////////////////  convert the char  2D array to  the struct  2 D array ///////////////////    
     while (pars < q)
     {

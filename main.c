@@ -6,140 +6,146 @@
 #include <X11/X.h>
 #include <X11/keysym.h>
 
-// #define W_W 600
-// #define W_H 300
-// #define MLX_ERROR 1
-// #define RED_PIXEL 0xFF0000
 
-// typedef struct s_data
-// {
-//     void *mlx_ptr;
-//     void *win_ptr;
-//     t_img img;
-// }   t_data;
+#define W_W 1200
+#define W_H 900
+#define I_W 700
+#define I_H 600
+#define MLX_ERROR 1
+#define RED_PIXEL 0xFF0000
 
-// int	handle_keypress(int keysym, t_data *data)
-// {
-//     if (keysym == XK_Escape)
-//     {
-//         mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-//         data->win_ptr = NULL;
-//     }
-//     return (0);
-// }
-
-// int	render(t_data *data)
-// {
-//     if (data->win_ptr != NULL)
-//         mlx_pixel_put(data->mlx_ptr, data->win_ptr, W_W / 2, W_H / 2, RED_PIXEL);
-//     return (0);
-// }
-
-
-// int main (int argc , char **argv)
-// {
-//     t_data data;
-
-//     data.mlx_ptr = mlx_init();
-//     if (data.mlx_ptr == NULL)
-//         return (MLX_ERROR);
-//     data.win_ptr = mlx_new_window(data.mlx_ptr, W_W, W_H, "My window");
-//         if (data.win_ptr == NULL)
-//         {
-//             free(data.win_ptr);
-//             return (MLX_ERROR);
-//         }
-
-//     mlx_loop_hook(data.mlx_ptr,&render,&data);
-//     mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
-
-//     data.img.img_ptr = mlx_new_image(data.mlx_ptr, W_H, W_H);
-
-
-//     mlx_loop(data.mlx_ptr);
-//     mlx_destroy_display(data.mlx_ptr);
-//     free(data.mlx_ptr);
-
-#include "fdf.h"
-#include "minilibx-linux/mlx.h"
-#include <math.h>
-
-t_map  isometric(int x, int y, int z)
+typedef struct s_data
 {
-t_map point;
+    void *mlx_ptr;
+    void *win_ptr;
+    t_img img;
+}   t_data;
 
- point.x = (x - y) * cos(0.523599);
- point.y = (x + y) * sin(0.523599) - z;
- point.z = z;
- return (point);
+void calculate_offsets(t_map_p *s, t_scale scale, double *offset_x, double *offset_y) {
+    double min_x = INFINITY, max_x = -INFINITY;
+    double min_y = INFINITY, max_y = -INFINITY;
+
+    // Find the min and max coordinates after isometric projection
+    for (int i = 0; i < s->dims.height; i++) {
+        for (int j = 0; j < s->dims.width; j++) {
+            double x = j * scale.x;
+            double y = i * scale.y;
+            double z = s->map[i][j].z * (scale.x / 4);  // Reduced z scale for better visualization
+            
+            // Calculate isometric coordinates without centering
+            double iso_x = (x - y) * cos(0.523599);
+            double iso_y = (x + y) * sin(0.523599) - z;
+            
+            min_x = fmin(min_x, iso_x);
+            max_x = fmax(max_x, iso_x);
+            min_y = fmin(min_y, iso_y);
+            max_y = fmax(max_y, iso_y);
+        }
+    }
+
+    // Calculate offsets to center the image
+    *offset_x = (I_W / 2) - (max_x + min_x) / 2;
+    *offset_y = (I_H / 2) - (max_y + min_y) / 2;
 }
 
-int main (int argc , char **argv)
+t_map isometric(double x, double y, double z) {
+    t_map point;
+    // Apply isometric projection
+    point.x = (x - y) * cos(0.523599) + I_W / 2;  // 30 degrees in radians
+    point.y = (x + y) * sin(0.523599) - z + I_H / 2;
+    point.z = z;
+
+    return point;
+}
+
+int	handle_keypress(int keysym, t_data *data)
 {
+    if (keysym == XK_Escape)
+    {
+        mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+        data->win_ptr = NULL;
+    }
+    // if (keysym == XK_r)
+    // {
+    //     color_screen(&data->img, 0xFF0000);
+    // }
+    //     if (keysym == XK_g)
+    // {
+    //         color_screen(&data->img,0x00FF00);
+
+    // }
+    // if (keysym == XK_b)
+    // {
+    //     color_screen(&data->img,0x0000FF);
+
+    // }
+   // mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.img_ptr, 0, 0);
+    return (0);
+}
+
+int main ()
+{
+    t_data data;
     t_map_p s;
-    t_map_p scal;
-    t_img img ;
-    void * win_ptr;
-    void * mlx_ptr;
-    int x_w = 1000;
-    int y_w = 800;
-    int x_i = 600;
-    int y_i = 600;
+    int fd = open("10-2.fdf",O_RDONLY | 0666);
+    data.mlx_ptr = mlx_init();
+    if (data.mlx_ptr == NULL)
+        return (MLX_ERROR);
+    data.win_ptr = mlx_new_window(data.mlx_ptr, W_W, W_H, "My window");
+        if (data.win_ptr == NULL)
+        {
+            free(data.win_ptr);
+            return (MLX_ERROR);
+        }
+///////////////////////////////// image put in the  screen  /////////////////////////////////
+    data.img.img_ptr = mlx_new_image(data.mlx_ptr, I_W, I_H);
+    data.img.img_data = mlx_get_data_addr(data.img.img_ptr, &data.img.bits_per_pixel, &data.img.size_line, &data.img.endian);
+    mlx_key_hook(data.win_ptr,handle_keypress,&data);
 
-    
+    s = parssing(fd);
 
-    mlx_ptr = mlx_init();
-    win_ptr = mlx_new_window(mlx_ptr,x_w,y_w,"test map !");
+     t_scale scale;
 
-   scal = s = parssing(open("10-2.fdf", O_RDONLY , 0666));
-
-   img.img_ptr = mlx_new_image(mlx_ptr,x_i,y_i);
-
-
-    t_scale scale;
-
-    scale.x = x_w / s.dims.width;
-    scale.y = y_w / s.dims.height;
+    scale.x = I_H / s.dims.height;
+    scale.y = I_W / s.dims.width;
 
     if (scale.x < scale.y) 
         scale.y = scale.x;
     else
         scale.x = scale.y;
+
     for (int i = 0; i < s.dims.height; i++)
     {
         for (int j = 0; j < s.dims.width; j++)
         {
-
-            s.map[i][j].x *= scale.x ;
-            s.map[i][j].y *= scale.y ;
-            s.map[i][j] = isometric(s.map[i][j].x,s.map[i][j].y,s.map[i][j].z);
-            mlx_pixel_put(mlx_ptr,win_ptr,s.map[i][j].x,s.map[i][j].y,0xFFFFFF);
+            s.map[i][j].x *= scale.x;
+            s.map[i][j].y *= scale.y;
+          //  s.map[i][j] = isometric(s.map[i][j].x,s.map[i][j].y,s.map[i][j].z);
+          
+         //   if (s.map[i][j].x >= 0 && s.map[i][j].x < I_W && s.map[i][j].y >= 0 && s.map[i][j].y < I_H) 
+                 my_mlx_pixel_put(&data.img,s.map[i][j].x,s.map[i][j].y,0xFFFFFF);
         }
     }
+    ////////////////////////////////////////////////////////////////
     for (int i = 0; i < s.dims.height; i++)
     {
         for (int j = 0; j < s.dims.width; j++)
         {
             if (j + 1 < s.dims.width)
             {
-                draw_myline(win_ptr,mlx_ptr,s.map[i][j].x,s.map[i][j].y,s.map[i][j + 1].x,s.map[i][j + 1].y,0xFFFFFF);
+             //   if (s.map[i][j].x >= 0 && s.map[i][j].x < I_W && s.map[i][j].y >= 0 && s.map[i][j].y < I_H)
+                draw_myline(&data.img,s.map[i][j].x,s.map[i][j].y,s.map[i][j + 1].x,s.map[i][j + 1].y,0xFFFFFF);
             }
             if (i + 1 < s.dims.height)
             {
-                draw_myline(win_ptr,mlx_ptr,s.map[i][j].x,s.map[i][j].y,s.map[i + 1][j].x,s.map[i + 1][j].y,0xFFFFFF);
+              //  if (s.map[i][j].x >= 0 && s.map[i][j].x < I_W && s.map[i][j].y >= 0 && s.map[i][j].y < I_H)
+               draw_myline(&data.img,s.map[i][j].x,s.map[i][j].y,s.map[i + 1][j].x,s.map[i + 1][j].y,0xFFFFFF);
             }
         }
     }
+    mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.img.img_ptr, 250, 150);
 
-    // for (int i = 0; i < s.dims.height; i++)
-    // {
-    //     for (int j = 0; j < s.dims.width; j++)
-    //     {
-    //         s.map[i][j].x *= scale.x ;
-    //         s.map[i][j].y *= scale.y ;
-    //         s.map[i][j] = isometric(s.map[i][j].x,s.map[i][j].y,s.map[i][j].z);
-    //         mlx_pixel_put(mlx_ptr,win_ptr,s.map[i][j].x,s.map[i][j].y,0xFFFFFF);
-    //     }
-    // }
-    mlx_loop(mlx_ptr);
+    mlx_loop(data.mlx_ptr);
+    mlx_destroy_display(data.mlx_ptr);
+    free(data.mlx_ptr);
 }

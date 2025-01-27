@@ -83,7 +83,7 @@ t_step choice (t_pos start, t_pos end);
 void initial_step(void *mlx_ptr,void *win_ptr,t_pos start,int p,t_step step,int color);
 void nega_decision(void *mlx_ptr,void *win_ptr,t_line line,int color);
 void posi_decision(void *mlx_ptr,void *win_ptr,t_line line,int color);
-void draw_myline (void *win_ptr, void *mlx_ptr ,int x1,int y1,int x2,int y2,int color);
+void draw_myline (t_img *img ,int x1,int y1,int x2,int y2,int color)
 ///////////////////./././/?////////////////////////////////////////////////////////
 
 void put_pixel_to_img(t_img *img, int x, int y, int color);

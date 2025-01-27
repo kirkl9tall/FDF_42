@@ -3,6 +3,14 @@
 #include <math.h>
 #include <stdio.h>
 
+void	img_pix_put(t_img *img, int x, int y, int color)
+{
+    char    *pixel;
+
+    pixel = img->img_ptr + (y * img->size_line + x * (img->bits_per_pixel / 8));
+    *(int *)pixel = color;
+}
+
 t_step choice (t_pos start, t_pos end)
 {
         t_step guid;
@@ -22,7 +30,7 @@ t_step choice (t_pos start, t_pos end)
             guid.x = 0;
     return (guid);
 }
-void initial_step(void *mlx_ptr,void *win_ptr,t_pos start,int p,t_step step,int color)
+void initial_step(t_img *img ,t_pos start,int p,t_step step,int color)
 {
     if (p < 0)
      start.x += step.x;
@@ -31,20 +39,20 @@ void initial_step(void *mlx_ptr,void *win_ptr,t_pos start,int p,t_step step,int 
         start.x +=step.x;
         start.y +=step.y;
      }
-     mlx_pixel_put(mlx_ptr,win_ptr,start.x,start.y,color);
+     img_pix_put(img,start.x, start.y, color);
 }
-void nega_decision(void *mlx_ptr,void *win_ptr,t_line line,int color)
+void nega_decision(t_img *img ,t_line line,int color)
 {
     line.start.x += line.step.x;
-    mlx_pixel_put(mlx_ptr,win_ptr,line.start.x,line.start.y,color);
+    img_pix_put(img,line.start.x, line.start.y, color);
 }
-void posi_decision(void *mlx_ptr,void *win_ptr,t_line line,int color)
+void posi_decision(t_img *img ,t_line line,int color)
 {
     line.start.x += line.step.x;
     line.start.y+=line.step.y;
-    mlx_pixel_put(mlx_ptr,win_ptr,line.start.x,line.start.y,color);
+    img_pix_put(img,line.start.x, line.start.y, color);
 }
-void draw_myline (void *win_ptr, void *mlx_ptr ,int x1,int y1,int x2,int y2,int color)
+void draw_myline (t_img *img ,int x1,int y1,int x2,int y2,int color)
 {
     t_line line;
 
@@ -56,46 +64,18 @@ void draw_myline (void *win_ptr, void *mlx_ptr ,int x1,int y1,int x2,int y2,int 
     line.diff.y = abs(line.end.y - line.start.y);
     line.step = choice(line.start,line.end);
     line.p = (2*line.diff.y) - line.diff.x;
-    mlx_pixel_put(mlx_ptr, win_ptr, line.start.x, line.start.y, color);
+    img_pix_put(img,line.start.x, line.start.y, color);
         while (line.start.x != line.end.x || line.start.y != line.end.y) 
         {
             if (line.p < 0) {
                 line.start.x += line.step.x;
-                mlx_pixel_put(mlx_ptr, win_ptr, line.start.x, line.start.y, color);
+               img_pix_put(img,line.start.x, line.start.y, color);
                 line.p += 2 * line.diff.y;
             } else {
                 line.start.x += line.step.x;
                 line.start.y += line.step.y;
-                mlx_pixel_put(mlx_ptr, win_ptr, line.start.x, line.start.y, color);
+                img_pix_put(img,line.start.x, line.start.y, color);
                 line.p += (2 * line.diff.y) - (2 * line.diff.x);
             }
         }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-void put_pixel_to_img(t_img *img, int x, int y, int color)
-{
-    if (x < 0 || y < 0 || x >= 1000 || y >= 800)
-        return; 
-
-    int pos = (y * img->size_line) + (x * (img->bits_per_pixel / 8));
-    *(int *)(img->img_data + pos) = color;
-}
-
-void draw_mylinee(t_img *img, int x1, int y1, int x2, int y2, int color)
-{
-    int dx = abs(x2 - x1);
-    int dy = abs(y2 - y1);
-    int sx = (x1 < x2) ? 1 : -1;
-    int sy = (y1 < y2) ? 1 : -1;
-    int err = dx - dy;
-
-    while (x1 != x2 || y1 != y2)
-    {
-        put_pixel_to_img(img, x1, y1, color);
-
-        int e2 = 2 * err;
-        if (e2 > -dy) { err -= dy; x1 += sx; }
-        if (e2 < dx) { err += dx; y1 += sy; }
-    }
 }

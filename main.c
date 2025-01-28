@@ -5,12 +5,12 @@
 #include <stdio.h>
 #include <X11/X.h>
 #include <X11/keysym.h>
-
+#include <limits.h>
 
 #define W_W 1200
 #define W_H 900
-#define I_W 700
-#define I_H 600
+#define I_W 800
+#define I_H 650
 #define MLX_ERROR 1
 #define RED_PIXEL 0xFF0000
 
@@ -21,25 +21,31 @@ typedef struct s_data
     t_img img;
 }   t_data;
 
-void calculate_offsets(t_map_p *s, t_scale scale, double *offset_x, double *offset_y) {
-    double min_x = INFINITY, max_x = -INFINITY;
-    double min_y = INFINITY, max_y = -INFINITY;
 
-    // Find the min and max coordinates after isometric projection
+void calculate_offsets_int(t_map_p *s, t_scale scale, int *offset_x, int *offset_y) {
+    int min_x = INT_MAX, max_x = INT_MIN;
+    int min_y = INT_MAX, max_y = INT_MIN;
+
+    // Precompute integer approximations for scaling and angles
+    int cos_angle = 866; // cos(30°) ≈ 0.866 scaled by 1000
+    int sin_angle = 500; // sin(30°) = 0.5 scaled by 1000
+    int z_scale = scale.x / 4;
+
     for (int i = 0; i < s->dims.height; i++) {
         for (int j = 0; j < s->dims.width; j++) {
-            double x = j * scale.x;
-            double y = i * scale.y;
-            double z = s->map[i][j].z * (scale.x / 4);  // Reduced z scale for better visualization
-            
-            // Calculate isometric coordinates without centering
-            double iso_x = (x - y) * cos(0.523599);
-            double iso_y = (x + y) * sin(0.523599) - z;
-            
-            min_x = fmin(min_x, iso_x);
-            max_x = fmax(max_x, iso_x);
-            min_y = fmin(min_y, iso_y);
-            max_y = fmax(max_y, iso_y);
+            int x = j * scale.x;
+            int y = i * scale.y;
+            int z = s->map[i][j].z * z_scale;
+
+            // Integer-based isometric projection
+            int iso_x = ((x - y) * cos_angle) / 1000;
+            int iso_y = ((x + y) * sin_angle) / 1000 - z;
+
+            // Update min/max bounds
+            if (iso_x < min_x) min_x = iso_x;
+            if (iso_x > max_x) max_x = iso_x;
+            if (iso_y < min_y) min_y = iso_y;
+            if (iso_y > max_y) max_y = iso_y;
         }
     }
 
@@ -48,11 +54,11 @@ void calculate_offsets(t_map_p *s, t_scale scale, double *offset_x, double *offs
     *offset_y = (I_H / 2) - (max_y + min_y) / 2;
 }
 
-t_map isometric(double x, double y, double z) {
+t_map isometric(int x, int y, int z) {
     t_map point;
-    // Apply isometric projection
-    point.x = (x - y) * cos(0.523599) + I_W / 2;  // 30 degrees in radians
-    point.y = (x + y) * sin(0.523599) - z + I_H / 2;
+
+    point.x = (x - y) * cos(0.523599);
+    point.y = (x + y) * sin(0.523599) - z;
     point.z = z;
 
     return point;
@@ -114,35 +120,47 @@ int main ()
     else
         scale.x = scale.y;
 
+    int offset_x = 2 ;int  offset_y = 2;
+    calculate_offsets_int(&s, scale, &offset_x, &offset_y);
+
+    // for (int i = 0; i < s.dims.height; i++)
+    // {
+    //     for (int j = 0; j < s.dims.width; j++)
+    //     {
+    //          s.map[i][j] = isometric(s.map[i][j].x,s.map[i][j].y,s.map[i][j].z);
+    //     }
+    // }
+
+
+
     for (int i = 0; i < s.dims.height; i++)
     {
         for (int j = 0; j < s.dims.width; j++)
         {
             s.map[i][j].x *= scale.x;
             s.map[i][j].y *= scale.y;
-          //  s.map[i][j] = isometric(s.map[i][j].x,s.map[i][j].y,s.map[i][j].z);
-          
-         //   if (s.map[i][j].x >= 0 && s.map[i][j].x < I_W && s.map[i][j].y >= 0 && s.map[i][j].y < I_H) 
-                 my_mlx_pixel_put(&data.img,s.map[i][j].x,s.map[i][j].y,0xFFFFFF);
+            my_mlx_pixel_put(&data.img,s.map[i][j].x,s.map[i][j].y,0xFFFFFF);
         }
     }
-    ////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////
     for (int i = 0; i < s.dims.height; i++)
     {
         for (int j = 0; j < s.dims.width; j++)
         {
             if (j + 1 < s.dims.width)
             {
-             //   if (s.map[i][j].x >= 0 && s.map[i][j].x < I_W && s.map[i][j].y >= 0 && s.map[i][j].y < I_H)
                 draw_myline(&data.img,s.map[i][j].x,s.map[i][j].y,s.map[i][j + 1].x,s.map[i][j + 1].y,0xFFFFFF);
             }
             if (i + 1 < s.dims.height)
             {
-              //  if (s.map[i][j].x >= 0 && s.map[i][j].x < I_W && s.map[i][j].y >= 0 && s.map[i][j].y < I_H)
                draw_myline(&data.img,s.map[i][j].x,s.map[i][j].y,s.map[i + 1][j].x,s.map[i + 1][j].y,0xFFFFFF);
             }
         }
     }
+
+
+
     mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.img.img_ptr, 250, 150);
 
     mlx_loop(data.mlx_ptr);

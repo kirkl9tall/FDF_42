@@ -85,20 +85,6 @@ int	handle_keypress(int keysym, t_data *data)
    // mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.img_ptr, 0, 0);
     return (0);
 }
-// void iso (t_map_p *s, int offset_x, int offset_y)
-// {
-//     for (int i = 0; i < s->dims.height; i++)
-//     {
-//         for (int j = 0; j < s->dims.width; j++)
-//         {
-//             s->map[i][j].x = (s->map[i][j].x - s->map[i][j].y) * cos(0.523599);
-//             s->map[i][j].y = (s->map[i][j].x + s->map[i][j].y) * sin(0.523599) - s->map[i][j].z;
-//             s->map[i][j].x += offset_x ;
-//             s->map[i][j].y += offset_y ;
-//         }
-//     }
-// }
-
 
 void  scaling (t_map_p *s, t_scale scale)
 {

@@ -60,7 +60,11 @@ typedef struct s_line {
     int p;
 } t_line;
 
-
+typedef struct s_wind
+{
+    int x;
+    int y;
+}t_wind;
 typedef struct s_dim
 {
     int width;
@@ -78,6 +82,21 @@ typedef struct s_map_p
     t_dim dims;
     t_scale scale;
 }   t_map_p;
+typedef struct s_fdf
+{
+    void * mlx_ptr;
+    void * win_ptr;
+    t_img *img;
+    t_map *map;
+    t_dim *dim;
+    t_scale scale;
+    t_line line;
+    t_diff diff;
+    t_step step;
+    t_pos pos;
+    t_wind wind;
+}   t_fdf;
+
 
 
 # ifndef BUFFER_SIZE

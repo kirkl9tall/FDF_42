@@ -113,7 +113,7 @@ void  scaling (t_map_p *s, t_scale scale)
     }
 }
 
-int main ()
+int drawing  ()
 {
     t_data data;
     t_map_p s;
@@ -154,7 +154,6 @@ int main ()
             s.map[i][j].y += offset_y ;
         }
     }
-
     for (int i = 0; i < s.dims.height; i++)
     {
         for (int j = 0; j < s.dims.width; j++)
@@ -167,17 +166,7 @@ int main ()
         }
     }
     mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.img.img_ptr, 0, 0);
-
     mlx_loop(data.mlx_ptr);
     mlx_destroy_display(data.mlx_ptr);
     free(data.mlx_ptr);
-
-    // for (int i = 0; i < s.dims.height; i++)
-    // {
-    //     for (int j = 0; j < s.dims.width; j++)
-    //     {
-    //         printf("%d ",s.map[i][j].z);
-    //     }
-    //     printf("\n");
-    // }
 }

@@ -7,7 +7,20 @@
 # include <unistd.h>
 # include <stdio.h>
 #include <stdbool.h>
+#include "fdf.h"
+#include "minilibx-linux/mlx.h"
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <X11/X.h>
+#include <X11/keysym.h>
+#include <limits.h>
 
+#define W_W 1500
+#define W_H 900
+#define I_W 1500
+#define I_H 900
+#define MLX_ERROR 1
 typedef struct s_img
 {
     void    *img_ptr;       
@@ -53,17 +66,19 @@ typedef struct s_dim
     int width;
     int height;
 }   t_dim;
-typedef struct s_map_p
-{
-    t_map **map;
-    t_dim dims; 
-}   t_map_p;
-
 typedef struct s_scale
 {
     int x;
     int y;
 }   t_scale;
+
+typedef struct s_map_p
+{
+    t_map **map;
+    t_dim dims;
+    t_scale scale;
+}   t_map_p;
+
 
 # ifndef BUFFER_SIZE
 # define BUFFER_SIZE 5

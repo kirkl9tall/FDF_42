@@ -51,7 +51,6 @@ size_t	checker_map(char *str)
             x++;
         }
     }
-        printf("count = %zu\n",count);
 	return (count);
 }
 ///////////////////////////////////////////////////  isometric projection ////////////////////////////////////
@@ -77,49 +76,60 @@ t_map_p parssing (int fd)
 	}
     ///////////////////////////////////////////// split    to a  2D array  type char  //////////////////////////////////////
     bigo = ft_split(loly,'\n');
+    free(loly);
 
     ////////////////////////// create a 2 arrays of  the struct that have x,y,z,colors ////////////////////////////////////
     bigloly.map = malloc (q * sizeof(t_map_p*));
-    int f = 0;
-    int words;
-    int index = 0;
-    int at = 0;
-    int pars = 0;
-    /////////////////////////////////////////////////  convert the char  2D array to  the struct  2 D array ///////////////////    
-    while (pars < q)
+    if (!bigloly.map)
     {
-        words = checker_map(bigo[pars]);
-        bigloly.map[pars] = malloc(words*(sizeof(t_map_p)));
+        printf("Error\n");
+        exit(1);
+    }
+
+    int f;
+    int words;
+    int index;
+    int line = 0;
+    /////////////////////////////////////////////////  convert the char  2D array to  the struct  2 D array ///////////////////    
+    while (line < q)
+    {
+        words = checker_map(bigo[line]);
+        bigloly.map[line] = malloc(words*(sizeof(t_map_p)));
         f = 0;
         index = 0;
         unsigned int color = 0;
-        while  (bigo[pars][f])
+        while  (bigo[line][f])
         {
-            if (bigo[pars][f] == ' ') 
-                f++;
-            else if (bigo[pars][f] == '-' || bigo[pars][f] <= '9' && bigo[pars][f] >='0' )
+            // if (bigo[line][f] == ' ') 
+            //     f++;
+            if (bigo[line][f] == '-' || bigo[line][f] <= '9' && bigo[line][f] >='0' )
             {
-                at = ft_atoi(bigo[pars],f); 
-                bigloly.map[pars][index].z = at;
-                bigloly.map[pars][index].x = index;
-                bigloly.map[pars][index].y = pars;
-                bigloly.map[pars][index].colors = 0x000000;
-                while (bigo[pars][f] >= '0'  && bigo[pars][f] <= '9')
+                bigloly.map[line][index].z =ft_atoi(bigo[line],f);
+                bigloly.map[line][index].x = index;
+                bigloly.map[line][index].y = line;
+                bigloly.map[line][index].colors = 0xFFFFFF;
+                while (bigo[line][f] >= '0'  && bigo[line][f] <= '9')
                     f++;
-                if (bigo[pars][f] == ',')
+                if (bigo[line][f] == ',')
                 {
                     f++;
-                    bigloly.map[pars][index].colors = char_tohex(bigo[pars],f);
+                    bigloly.map[line][index].colors = char_tohex(bigo[line],f);
+                    while ((bigo[line][f] >= '0' && bigo[line][f] <= '9') ||(bigo[line][f] >= 'a' && bigo[line][f] <= 'f') ||(bigo[line][f] >= 'A' && bigo[line][f] <= 'F'))
+                        f++;
                 }
                 index++;
-                while (bigo[pars][f] != ' ' && bigo[pars][f] != '\0')
+                while (bigo[line][f] != ' ' && bigo[line][f] != '\0')
                     f++;    
             }
-            f++;    
+            while (bigo[line][f] == ' ')
+                f++;    
         }
-        pars++;
+        line++;
     }
-    bigloly.dims.height = pars;
+    bigloly.dims.height = line;
     bigloly.dims.width = words;
+    free(bigo);
+    printf("%d\n",bigloly.dims.height);
+    printf("%d\n",bigloly.dims.width);
     return (bigloly);
 }

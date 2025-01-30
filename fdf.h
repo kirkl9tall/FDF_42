@@ -21,6 +21,12 @@
 #define I_W 1500
 #define I_H 900
 #define MLX_ERROR 1
+typedef struct s_offset
+{
+    int x;
+    int y;
+}   t_offset;
+
 typedef struct s_img
 {
     void    *img_ptr;       
@@ -74,6 +80,7 @@ typedef struct s_scale
 {
     int x;
     int y;
+    int z;
 }   t_scale;
 
 typedef struct s_map_p

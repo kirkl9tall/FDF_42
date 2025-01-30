@@ -38,36 +38,26 @@ void calculate_min_max_z(t_map_p *s, t_z *z_values) {
     }
 }
 
-void calculate_offsets_int(t_map_p *s, t_scale scale, int *offset_x, int *offset_y) {
+void calculate_offsets(t_map_p *s, t_offset *offsets) {
     int min_x = INT_MAX, max_x = INT_MIN;
     int min_y = INT_MAX, max_y = INT_MIN;
 
-    // Precompute integer approximations for scaling and angles
-    int cos_angle = 866; // cos(30°) ≈ 0.866 scaled by 1000
-    int sin_angle = 500; // sin(30°) = 0.5 scaled by 1000
-    int z_scale = scale.x / 4;
-
+    // Find min/max coordinates of projected points
     for (int i = 0; i < s->dims.height; i++) {
         for (int j = 0; j < s->dims.width; j++) {
-            int x = j * scale.x;
-            int y = i * scale.y;
-            int z = s->map[i][j].z * z_scale;
-
-            // Integer-based isometric projection
-            int iso_x = ((x - y) * cos_angle) / 1000;
-            int iso_y = ((x + y) * sin_angle) / 1000 - z;
-
-            // Update min/max bounds
-            if (iso_x < min_x) min_x = iso_x;
-            if (iso_x > max_x) max_x = iso_x;
-            if (iso_y < min_y) min_y = iso_y;
-            if (iso_y > max_y) max_y = iso_y;
+            int x = s->map[i][j].x;
+            int y = s->map[i][j].y;
+            
+            if (x < min_x) min_x = x;
+            if (x > max_x) max_x = x;
+            if (y < min_y) min_y = y;
+            if (y > max_y) max_y = y;
         }
     }
 
-    // Calculate offsets to center the image
-    *offset_x = (I_W / 2) - (max_x + min_x) / 2;
-    *offset_y = (I_H / 2) - (max_y + min_y) / 2;
+    // Calculate centering offsets
+    offsets->x = (I_W / 2) - (max_x + min_x) / 2;
+    offsets->y = (I_H / 2) - (max_y + min_y) / 2;
 }
 
 t_map isometric(int x, int y, int z) {
@@ -125,7 +115,7 @@ int main ()
 {
     t_data data;
     t_map_p s;
-    int fd = open("pyramide.fdf",O_RDONLY | 0666);
+    int fd = open("42.fdf",O_RDONLY | 0666);
     data.mlx_ptr = mlx_init();
     if (data.mlx_ptr == NULL)
         return (MLX_ERROR);
@@ -142,8 +132,9 @@ int main ()
     s = parssing(fd);
 
     t_scale scale;
-    scale.x = (W_H / s.dims.height /2) ;
-    scale.y = (W_W / s.dims.width/2) ;
+    scale.x = (I_H / s.dims.height / 1.5) ;
+    scale.y = (I_W / s.dims.width / 1.5) ;
+    scale.z = scale.x / 4;
 
     if (scale.x < scale.y) 
         scale.y = scale.x;
@@ -151,10 +142,11 @@ int main ()
         scale.x = scale.y;
 
     int offset_x, offset_y ;
-    calculate_offsets_int(&s, scale, &offset_x, &offset_y);
+   // calculate_offsets_int(&s, scale, &offset_x, &offset_y);
+    scaling(&s,scale); 
+    
     t_z z_values ;
     calculate_min_max_z(&s, &z_values);
-    scaling(&s,scale); 
 
     for (int i = 0; i < s.dims.height; i++)
     {
@@ -162,10 +154,20 @@ int main ()
         {
            s.map[i][j] = isometric(s.map[i][j].x,s.map[i][j].y,s.map[i][j].z);
            s.map[i][j].colors = get_color(s.map[i][j].z, z_values.z_min, z_values.z_max);
-            s.map[i][j].x += offset_x ;
-            s.map[i][j].y += offset_y ;
+          //  s.map[i][j].x += offset_x ;
+            //s.map[i][j].y += offset_y ;
         }
     }
+    t_offset offsets;
+
+    calculate_offsets(&s, &offsets);
+    
+    for (int i = 0; i < s.dims.height; i++) {
+    for (int j = 0; j < s.dims.width; j++) {
+        s.map[i][j].x += offsets.x;
+        s.map[i][j].y += offsets.y;
+    }
+}
 
     for (int i = 0; i < s.dims.height; i++)
     {

@@ -120,6 +120,9 @@ void nega_decision(t_img *img ,t_line line,int color);
 void posi_decision(t_img *img ,t_line line,int color);
 void draw_myline (t_img *img ,int x1,int y1,int x2,int y2,int color);
 
+int color_lerp(int color_start, int color_end, float t);
+float lerp(float start, float end, float t);
+
 /// ////////////
 unsigned int  char_tohex (char *s,int index);
 size_t	checker_map(char *str);

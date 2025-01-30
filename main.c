@@ -11,6 +11,11 @@
 #define MLX_ERROR 1
 #define RED_PIXEL 0xFF0000
 
+typedef struct s_z
+{
+    int z_min;
+    int z_max;    
+}   t_z;
 typedef struct s_data
 {
     void *mlx_ptr;
@@ -18,6 +23,20 @@ typedef struct s_data
     t_img img;
 }   t_data;
 
+
+void calculate_min_max_z(t_map_p *s, t_z *z_values) {
+    z_values->z_min = INT_MAX;
+    z_values->z_max = INT_MIN;
+
+    for (int i = 0; i < s->dims.height; i++) {
+        for (int j = 0; j < s->dims.width; j++) {
+            if (s->map[i][j].z < z_values->z_min)
+                z_values->z_min = s->map[i][j].z;
+            if (s->map[i][j].z > z_values->z_max)
+                z_values->z_max = s->map[i][j].z;
+        }
+    }
+}
 
 void calculate_offsets_int(t_map_p *s, t_scale scale, int *offset_x, int *offset_y) {
     int min_x = INT_MAX, max_x = INT_MIN;
@@ -61,6 +80,8 @@ t_map isometric(int x, int y, int z) {
     return point;
 }
 
+
+
 int	handle_keypress(int keysym, t_data *data)
 {
     if (keysym == XK_Escape)
@@ -68,22 +89,23 @@ int	handle_keypress(int keysym, t_data *data)
         mlx_destroy_window(data->mlx_ptr, data->win_ptr);
         data->win_ptr = NULL;
     }
-    // if (keysym == XK_r)
-    // {
-    //     color_screen(&data->img, 0xFF0000);
-    // }
-    //     if (keysym == XK_g)
-    // {
-    //         color_screen(&data->img,0x00FF00);
-
-    // }
-    // if (keysym == XK_b)
-    // {
-    //     color_screen(&data->img,0x0000FF);
-
-    // }
-   // mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.img_ptr, 0, 0);
     return (0);
+}
+
+int get_color(int z, int z_min, int z_max)
+{
+    double ratio;
+    int red;
+    int green;
+    int blue;
+
+    if (z_min == z_max)
+        return (0xFFFFFF);
+    ratio = (double)(z - z_min) / (z_max - z_min);
+    red = (int)(255 * ratio);
+    green = (int)(255 * (1 - ratio));
+    blue = 200;
+    return ((red << 16) | (green << 8) | blue);
 }
 
 void  scaling (t_map_p *s, t_scale scale)
@@ -92,9 +114,9 @@ void  scaling (t_map_p *s, t_scale scale)
     {
         for (int j = 0; j < s->dims.width; j++)
         {
-            s->map[i][j].x = j * scale.x  -  (scale.x / 2);
-            s->map[i][j].y = i * scale.y -  (scale.y / 2);
-            s->map[i][j].z = s->map[i][j].z * s->map[i][j].z  ;
+            s->map[i][j].x = j * scale.x  -  (scale.x/10);
+            s->map[i][j].y = i * scale.y -  (scale.y/10);
+            s->map[i][j].z = s->map[i][j].z  * s->map[i][j].z;
         }
     }
 }
@@ -120,8 +142,8 @@ int main ()
     s = parssing(fd);
 
     t_scale scale;
-    scale.x = (W_H / s.dims.height) ;
-    scale.y = (W_W / s.dims.width) ;
+    scale.x = (W_H / s.dims.height /2) ;
+    scale.y = (W_W / s.dims.width/2) ;
 
     if (scale.x < scale.y) 
         scale.y = scale.x;
@@ -130,12 +152,16 @@ int main ()
 
     int offset_x, offset_y ;
     calculate_offsets_int(&s, scale, &offset_x, &offset_y);
-    scaling(&s,scale);
+    t_z z_values ;
+    calculate_min_max_z(&s, &z_values);
+    scaling(&s,scale); 
+
     for (int i = 0; i < s.dims.height; i++)
     {
         for (int j = 0; j < s.dims.width; j++)
         {
            s.map[i][j] = isometric(s.map[i][j].x,s.map[i][j].y,s.map[i][j].z);
+           s.map[i][j].colors = get_color(s.map[i][j].z, z_values.z_min, z_values.z_max);
             s.map[i][j].x += offset_x ;
             s.map[i][j].y += offset_y ;
         }
@@ -147,9 +173,9 @@ int main ()
         {
             my_mlx_pixel_put(&data.img,s.map[i][j].x,s.map[i][j].y,s.map[i][j].colors);
             if (j + 1 < s.dims.width)
-                draw_myline(&data.img,s.map[i][j].x,s.map[i][j].y,s.map[i][j + 1].x,s.map[i][j + 1].y,0xFFFFFF);
+                draw_myline(&data.img,s.map[i][j].x,s.map[i][j].y,s.map[i][j + 1].x,s.map[i][j + 1].y,s.map[i][j].colors);
             if (i + 1 < s.dims.height)
-               draw_myline(&data.img,s.map[i][j].x,s.map[i][j].y,s.map[i + 1][j].x,s.map[i + 1][j].y,0xFFFFFF);
+               draw_myline(&data.img,s.map[i][j].x,s.map[i][j].y,s.map[i + 1][j].x,s.map[i + 1][j].y,s.map[i][j].colors);
         }
     }
     mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.img.img_ptr, 0, 0);

@@ -108,12 +108,14 @@ t_map_p parssing (int fd)
                 bigloly.map[line][index].x = index;
                 bigloly.map[line][index].y = line;
                 bigloly.map[line][index].colors = 0xFFFFFF;
+                bigloly.map[line][index].no_color = 1;
                 while (bigo[line][f] >= '0'  && bigo[line][f] <= '9')
                     f++;
                 if (bigo[line][f] == ',')
                 {
                     f++;
                     bigloly.map[line][index].colors = char_tohex(bigo[line],f);
+                    bigloly.map[line][index].no_color = 0;
                     while ((bigo[line][f] >= '0' && bigo[line][f] <= '9') ||(bigo[line][f] >= 'a' && bigo[line][f] <= 'f') ||(bigo[line][f] >= 'A' && bigo[line][f] <= 'F'))
                         f++;
                 }
@@ -122,14 +124,22 @@ t_map_p parssing (int fd)
                     f++;    
             }
             while (bigo[line][f] == ' ')
-                f++;    
+                f++;   
         }
         line++;
     }
+    // for (int i = 0; i < line; i++)
+    // {
+    //     for (int j = 0; j < words; j++)
+    //     {
+    //         printf("%d ",bigloly.map[i][j].colors);
+    //     }
+    //     printf("\n");
+    // }
     bigloly.dims.height = line;
     bigloly.dims.width = words;
     free(bigo);
-    printf("%d\n",bigloly.dims.height);
-    printf("%d\n",bigloly.dims.width);
+    // printf("%d\n",bigloly.dims.height);
+    // printf("%d\n",bigloly.dims.width);
     return (bigloly);
 }

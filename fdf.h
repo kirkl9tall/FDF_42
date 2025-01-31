@@ -41,6 +41,7 @@ typedef struct s_map
     int y;
     int z;
     unsigned int colors;
+    int no_color;
 }   t_map;
 typedef struct  s_pos
 {
@@ -125,7 +126,7 @@ void my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void initial_step(t_img *img ,t_pos start,int p,t_step step,int color);
 void nega_decision(t_img *img ,t_line line,int color);
 void posi_decision(t_img *img ,t_line line,int color);
-void draw_myline (t_img *img ,int x1,int y1,int x2,int y2,int color);
+void draw_myline(t_img *img, int x1, int y1, int x2, int y2, int color_start,int color_end);
 
 int color_lerp(int color_start, int color_end, float t);
 float lerp(float start, float end, float t);

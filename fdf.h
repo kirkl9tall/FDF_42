@@ -16,10 +16,10 @@
 #include <X11/keysym.h>
 #include <limits.h>
 
-#define W_W 1500
-#define W_H 900
-#define I_W 1500
-#define I_H 900
+#define W_W 1920
+#define W_H 1040
+#define I_W 1920
+#define I_H 1040
 #define MLX_ERROR 1
 typedef struct s_offset
 {
@@ -130,6 +130,7 @@ void draw_myline(t_img *img, int x1, int y1, int x2, int y2, int color_start,int
 
 int color_lerp(int color_start, int color_end, float t);
 float lerp(float start, float end, float t);
+t_map isometric(int x, int y, int z,int color, int no_color);
 
 /// ////////////
 unsigned int  char_tohex (char *s,int index);

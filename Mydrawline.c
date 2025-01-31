@@ -67,6 +67,7 @@ void draw_myline(t_img *img, int x1, int y1, int x2, int y2, int color_start,int
         int tmp;
         tmp = x1; x1 = x2; x2 = tmp;
         tmp = y1; y1 = y2; y2 = tmp;
+        tmp = color_start; color_start = color_end; color_end = tmp; 
     }
 
     line.start.x = x1;

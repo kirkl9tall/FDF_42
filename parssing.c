@@ -128,6 +128,7 @@ t_map_p parssing (int fd)
         }
         line++;
     }
+
     // for (int i = 0; i < line; i++)
     // {
     //     for (int j = 0; j < words; j++)

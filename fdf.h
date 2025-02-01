@@ -1,13 +1,12 @@
 #ifndef FDF_H
 #define FDF_H
 
+#include "fdf.h"
 # include <fcntl.h>
 # include <stddef.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdio.h>
 #include <stdbool.h>
-#include "fdf.h"
 #include "minilibx-linux/mlx.h"
 #include <math.h>
 #include <stdlib.h>
@@ -16,16 +15,44 @@
 #include <X11/keysym.h>
 #include <limits.h>
 
+
 #define W_W 1920
 #define W_H 1040
 #define I_W 1920
 #define I_H 1040
 #define MLX_ERROR 1
-typedef struct s_offset
+
+typedef struct s_scale
 {
     int x;
     int y;
-}   t_offset;
+    int z;
+}   t_scale;
+typedef struct s_dim
+{
+    int width;
+    int height;
+}   t_dim;
+typedef struct s_map
+{
+    int x;
+    int y;
+    int z;
+    unsigned int colors;
+    int no_color;
+}   t_map;
+
+typedef struct s_map_p
+{
+    t_map **map;
+    t_dim dims;
+    t_scale scale;
+}   t_map_p;
+typedef struct s_z
+{
+    int z_min;
+    int z_max;    
+}   t_z;
 
 typedef struct s_img
 {
@@ -35,14 +62,21 @@ typedef struct s_img
     int     size_line;     
     int     endian;         
 } t_img;
-typedef struct s_map
+typedef struct s_data
+{
+    void *mlx_ptr;
+    void *win_ptr;
+    t_img img;
+    t_map_p *map_p;
+    int error;
+}   t_data;
+
+typedef struct s_offset
 {
     int x;
     int y;
-    int z;
-    unsigned int colors;
-    int no_color;
-}   t_map;
+}   t_offset;
+
 typedef struct  s_pos
 {
     int x;
@@ -72,24 +106,7 @@ typedef struct s_wind
     int x;
     int y;
 }t_wind;
-typedef struct s_dim
-{
-    int width;
-    int height;
-}   t_dim;
-typedef struct s_scale
-{
-    int x;
-    int y;
-    int z;
-}   t_scale;
 
-typedef struct s_map_p
-{
-    t_map **map;
-    t_dim dims;
-    t_scale scale;
-}   t_map_p;
 typedef struct s_fdf
 {
     void * mlx_ptr;
@@ -131,8 +148,12 @@ void draw_myline(t_img *img, int x1, int y1, int x2, int y2, int color_start,int
 int color_lerp(int color_start, int color_end, float t);
 float lerp(float start, float end, float t);
 t_map isometric(int x, int y, int z,int color, int no_color);
-
-/// ////////////
+void calculate_min_max_z(t_map_p *s, t_z *z_values);
+void calculate_offsets(t_map_p *s, t_offset *offsets);
+int	handle_keypress(int keysym, t_data *data);
+int get_color(int z, int z_min, int z_max);
+void  scaling (t_map_p *s, t_scale scale);
+void holishiiit (int fd);
 unsigned int  char_tohex (char *s,int index);
 size_t	checker_map(char *str);
 t_map_p parssing (int fd);

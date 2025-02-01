@@ -30,8 +30,6 @@ void calculate_offsets(t_map_p *s, t_offset *offsets) {
             if (y > max_y) max_y = y;
         }
     }
-
-    // Calculate centering offsets
     offsets->x = (I_W / 2) - (max_x + min_x) / 2;
     offsets->y = (I_H / 2) - (max_y + min_y) / 2;
 }
@@ -42,22 +40,25 @@ t_map isometric(int x, int y, int z,int color, int no_color) {
     point.x = (x - y) * cos(0.523599); // 30 degrees
     point.y = (x + y) * sin(0.523599) - z;  // 30 degrees
     point.z = z  ;
-    point.colors = color; // Preserve the color
-    point.no_color = no_color; 
+    point.colors = color; // if there is a color 
+    point.no_color = no_color; // if there is no color 
 
     return point;
 }
-
-
 
 int	handle_keypress(int keysym, t_data *data)
 {
     int i = 0;
 
     if (keysym == XK_Escape)
-    {
-        mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-        data->win_ptr = NULL;
+    {   
+        if (data->mlx_ptr && data->img.img_ptr)
+            mlx_destroy_image(data->mlx_ptr,data->img.img_ptr);
+        if (data->mlx_ptr && data->win_ptr)
+            mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+        if (data->mlx_ptr)
+            mlx_destroy_display(data->mlx_ptr);
+        exit(1);
     }
     return (0);
 }

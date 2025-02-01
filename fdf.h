@@ -107,23 +107,6 @@ typedef struct s_wind
     int y;
 }t_wind;
 
-typedef struct s_fdf
-{
-    void * mlx_ptr;
-    void * win_ptr;
-    t_img *img;
-    t_map *map;
-    t_dim *dim;
-    t_scale scale;
-    t_line line;
-    t_diff diff;
-    t_step step;
-    t_pos pos;
-    t_wind wind;
-}   t_fdf;
-
-
-
 # ifndef BUFFER_SIZE
 # define BUFFER_SIZE 5
 # endif
@@ -157,5 +140,7 @@ void holishiiit (int fd);
 unsigned int  char_tohex (char *s,int index);
 size_t	checker_map(char *str);
 t_map_p parssing (int fd);
+void coloring(t_map_p *s, t_z *z_values);
+void draw_lines(t_data *data, t_map_p *s);
 
 #endif

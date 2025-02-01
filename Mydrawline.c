@@ -103,28 +103,4 @@ void draw_myline(t_img *img, int x1, int y1, int x2, int y2, int color_start,int
     }
 }
 
-/*
-    The problem with handling steep lines in your current implementation is likely due to the Bresenham's line algorithm not 
-    being correctly adjusted for cases where the slope is greater than 1. When the line is steep,
-     the increments should happen in the y-axis rather than the x-axis.
-
-Explanation:
-Steepness Check:
-
-Determine if the line is steep by comparing the absolute differences between y and x coordinates.
-If the line is steep, swap the x and y coordinates for both start and end points.
- This ensures that the algorithm increments along the longer axis.Coordinate Swapping:
-
-Ensure that x1 is always less than x2 by swapping the start and end points if necessary. This simplifies the loop condition.
-Drawing Loop:
-
-Use the modified Bresenham's algorithm to plot points. If the line is steep, plot the points using swapped coordinates.
-Error Calculation:
-
-Adjust the error term and y-coordinate appropriately to handle the steepness.
-By implementing these changes, the function will correctly handle steep lines and ensure that all pixels are plotted 
-in the correct order.
-
-
-*/
 

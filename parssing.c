@@ -54,11 +54,23 @@ size_t	checker_map(char *str)
 	return (count);
 }
 ///////////////////////////////////////////////////  isometric projection ////////////////////////////////////
+void free_bigo(char **s,t_map_p bigloly)
+{
+    int i;
+    i = 0;
+        while (i < bigloly.dims.height)
+        {
+            if (s[i])
+                free (s[i]);
+            i++;
+        }
+        free(s);
+}
 t_map_p parssing (int fd)
 {
     if (fd == -1)
     {
-        printf("Error\n");
+        printf("Error in Map ! \n");
         exit(1);
     }
 	t_map_p bigloly;
@@ -76,10 +88,9 @@ t_map_p parssing (int fd)
 	}
     ///////////////////////////////////////////// split    to a  2D array  type char  //////////////////////////////////////
     bigo = ft_split(loly,'\n');
-    free(loly);
 
     ////////////////////////// create a 2 arrays of  the struct that have x,y,z,colors ////////////////////////////////////
-    bigloly.map = malloc (q * sizeof(t_map_p*));
+    bigloly.map = malloc (q * sizeof(t_map*));
     if (!bigloly.map)
     {
         printf("Error\n");
@@ -94,14 +105,12 @@ t_map_p parssing (int fd)
     while (line < q)
     {
         words = checker_map(bigo[line]);
-        bigloly.map[line] = malloc(words*(sizeof(t_map_p)));
+        bigloly.map[line] = malloc(words*(sizeof(t_map)));
         f = 0;
         index = 0;
         unsigned int color = 0;
         while  (bigo[line][f])
         {
-            // if (bigo[line][f] == ' ') 
-            //     f++;
             if (bigo[line][f] == '-' || bigo[line][f] <= '9' && bigo[line][f] >='0' )
             {
                 bigloly.map[line][index].z =ft_atoi(bigo[line],f);
@@ -129,18 +138,9 @@ t_map_p parssing (int fd)
         line++;
     }
 
-    // for (int i = 0; i < line; i++)
-    // {
-    //     for (int j = 0; j < words; j++)
-    //     {
-    //         printf("%d ",bigloly.map[i][j].colors);
-    //     }
-    //     printf("\n");
-    // }
     bigloly.dims.height = line;
     bigloly.dims.width = words;
-    free(bigo);
-    // printf("%d\n",bigloly.dims.height);
-    // printf("%d\n",bigloly.dims.width);
+    free(loly);
+    free_bigo(bigo,bigloly);
     return (bigloly);
 }

@@ -31,6 +31,7 @@ void scaler (t_scale *scale, t_map_p *s)
     else
         scale->x = scale->y;
 }
+
 void iso (t_map_p *s)
 {
     for (int i = 0; i < s->dims.height; i++)
@@ -52,6 +53,23 @@ void add_offset(t_map_p *s, t_offset *offsets)
         }
     }
 }
+void free_map (t_map_p *s)
+{
+    int i;
+
+    i = 0;
+    if (!s || !s->map) 
+        return;
+    while(i<s-> dims.height)
+    {
+        if (s->map[i])
+            free (s->map[i]);
+        i++;
+    }
+     free(s->map);
+    s->map = NULL;
+}
+
 void holishiiit (int fd)
 {
     t_data data;
@@ -72,7 +90,7 @@ void holishiiit (int fd)
     coloring(&s, &z_values);
     draw_lines(&data, &s);
     mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.img.img_ptr, 0, 0);
+    free_map(&s);
     mlx_loop(data.mlx_ptr);
-    mlx_destroy_display(data.mlx_ptr);
     free(data.mlx_ptr);
 }

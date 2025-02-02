@@ -1,7 +1,6 @@
 #ifndef FDF_H
 #define FDF_H
 
-#include "fdf.h"
 # include <fcntl.h>
 # include <stddef.h>
 # include <stdlib.h>
@@ -47,6 +46,7 @@ typedef struct s_map_p
     t_map **map;
     t_dim dims;
     t_scale scale;
+
 }   t_map_p;
 typedef struct s_z
 {
@@ -62,14 +62,7 @@ typedef struct s_img
     int     size_line;     
     int     endian;         
 } t_img;
-typedef struct s_data
-{
-    void *mlx_ptr;
-    void *win_ptr;
-    t_img img;
-    t_map_p *map_p;
-    int error;
-}   t_data;
+
 
 typedef struct s_offset
 {
@@ -107,6 +100,24 @@ typedef struct s_wind
     int y;
 }t_wind;
 
+typedef  enum e_projection
+{
+    ISO,
+    FRONT,
+    SIDE
+
+}  t_projection;
+
+typedef struct s_data
+{
+    void *mlx_ptr;
+    void *win_ptr;
+    t_img img;
+    t_map_p sa;
+    t_projection projection;
+    int error;
+}   t_data;
+
 # ifndef BUFFER_SIZE
 # define BUFFER_SIZE 5
 # endif
@@ -142,5 +153,7 @@ size_t	checker_map(char *str);
 t_map_p parssing (int fd);
 void coloring(t_map_p *s, t_z *z_values);
 void draw_lines(t_data *data, t_map_p *s);
+t_map front_view(int x,  int z,int color, int no_color);
+void front (t_map_p *s);
 
 #endif

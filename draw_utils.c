@@ -33,7 +33,6 @@ void calculate_offsets(t_map_p *s, t_offset *offsets) {
     offsets->x = (I_W / 2) - (max_x + min_x) / 2;
     offsets->y = (I_H / 2) - (max_y + min_y) / 2;
 }
-
 t_map isometric(int x, int y, int z,int color, int no_color) {
     t_map point;
 
@@ -48,8 +47,6 @@ t_map isometric(int x, int y, int z,int color, int no_color) {
 
 int	handle_keypress(int keysym, t_data *data)
 {
-    int i = 0;
-
     if (keysym == XK_Escape)
     {   
         if (data->mlx_ptr && data->img.img_ptr)
@@ -60,6 +57,7 @@ int	handle_keypress(int keysym, t_data *data)
             mlx_destroy_display(data->mlx_ptr);
         exit(1);
     }
+    
     return (0);
 }
 

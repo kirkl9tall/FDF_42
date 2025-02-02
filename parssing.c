@@ -108,10 +108,9 @@ t_map_p parssing (int fd)
         bigloly.map[line] = malloc(words*(sizeof(t_map)));
         f = 0;
         index = 0;
-        unsigned int color = 0;
         while  (bigo[line][f])
         {
-            if (bigo[line][f] == '-' || bigo[line][f] <= '9' && bigo[line][f] >='0' )
+            if (bigo[line][f] == '-' || (bigo[line][f] <= '9' && bigo[line][f] >='0'))
             {
                 bigloly.map[line][index].z =ft_atoi(bigo[line],f);
                 bigloly.map[line][index].x = index;

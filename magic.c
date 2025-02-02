@@ -22,8 +22,8 @@ void initialize_data(t_data *data)
 }
 void scaler (t_scale *scale, t_map_p *s)
 {
-    scale->x = (I_H / s->dims.height / 1.5) ;
-    scale->y = (I_W / s->dims.width / 1.5) ;
+    scale->x = (I_H / s->dims.height / 2) ;
+    scale->y = (I_W / s->dims.width / 2) ;
     scale->z = scale->x ;
 
     if (scale->x < scale->y) 
@@ -39,6 +39,27 @@ void iso (t_map_p *s)
         for (int j = 0; j < s->dims.width; j++)
         {
             s->map[i][j] = isometric(s->map[i][j].x,s->map[i][j].y,s->map[i][j].z,s->map[i][j].colors, s->map[i][j].no_color);
+        }
+    }
+}
+t_map front_view(int x, int z, int color, int no_color) {
+    t_map point;
+
+    point.x = x;           
+    point.y = -z;          
+    point.z = z;           
+    point.colors = color;
+    point.no_color = no_color;
+
+    return point;
+}
+void front (t_map_p *s)
+{
+    for (int i = 0; i < s->dims.height; i++)
+    {
+        for (int j = 0; j < s->dims.width; j++)
+        {
+            s->map[i][j] = front_view(s->map[i][j].x,s->map[i][j].z,s->map[i][j].colors, s->map[i][j].no_color);
         }
     }
 }
@@ -84,6 +105,7 @@ void holishiiit (int fd)
     scaler(&scale, &s);
     scaling(&s,scale); 
     iso(&s);
+    //front(&s);
     calculate_offsets(&s, &offsets);
     add_offset(&s, &offsets);
     calculate_min_max_z(&s, &z_values);

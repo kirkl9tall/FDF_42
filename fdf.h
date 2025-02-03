@@ -14,6 +14,7 @@
 #include <X11/keysym.h>
 #include <limits.h>
 
+#define BUFFER_SIZE 1
 
 #define W_W 1920
 #define W_H 1040
@@ -21,38 +22,35 @@
 #define I_H 1040
 #define MLX_ERROR 1
 
-typedef struct s_scale
+
+typedef struct s_pos
+{
+    int i;
+    int j;
+}   t_pos;
+typedef struct ofsset_value
+{
+    int x_min;
+    int y_min;
+    int x_max;
+    int y_max;
+}   t_offset_value;
+typedef struct s_point
 {
     int x;
     int y;
     int z;
-}   t_scale;
-typedef struct s_dim
-{
-    int width;
-    int height;
-}   t_dim;
-typedef struct s_map
-{
-    int x;
-    int y;
-    int z;
-    unsigned int colors;
-    int no_color;
-}   t_map;
+    unsigned int color;
+    int has_color;
 
-typedef struct s_map_p
+} t_point;
+typedef enum e_projection
 {
-    t_map **map;
-    t_dim dims;
-    t_scale scale;
-
-}   t_map_p;
-typedef struct s_z
-{
-    int z_min;
-    int z_max;    
-}   t_z;
+    PROJ_ISO,
+    PROJ_TOP,
+    PROJ_FRONT,
+    PROJ_SIDE
+} t_projection;
 
 typedef struct s_img
 {
@@ -63,18 +61,12 @@ typedef struct s_img
     int     endian;         
 } t_img;
 
-
 typedef struct s_offset
 {
     int x;
     int y;
 }   t_offset;
 
-typedef struct  s_pos
-{
-    int x;
-    int y;
-}   t_pos;
 typedef struct s_step
 {
     int x;
@@ -85,7 +77,6 @@ typedef struct s_diff
     int  x;
     int y;
 }t_diff;
-
 typedef struct s_line {
     t_pos start; 
     t_pos end;   
@@ -93,34 +84,37 @@ typedef struct s_line {
     t_step step; 
     int p;
 } t_line;
+typedef struct s_index
+{
+    int index;
+    int words;
+}   t_index;
 
-typedef struct s_wind
+typedef struct s_scale
 {
     int x;
     int y;
-}t_wind;
+    int z;
+}   t_scale;
 
-typedef  enum e_projection
-{
-    ISO,
-    FRONT,
-    SIDE
-
-}  t_projection;
-
-typedef struct s_data
-{
-    void *mlx_ptr;
-    void *win_ptr;
+typedef struct s_fdf
+{   
+    void *mlx;
+    void *win;
     t_img img;
-    t_map_p sa;
+    t_point **map;
+    int width;
+    int height;
+    int z_min;
+    int z_max;
     t_projection projection;
-    int error;
-}   t_data;
+    t_offset offset;
+    t_scale scale;
+    float zoom;
+    t_offset_value ofsset_value;
+}   t_fdf;
 
-# ifndef BUFFER_SIZE
-# define BUFFER_SIZE 5
-# endif
+
 char	*get_next_line(int fd);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(char *str);
@@ -131,29 +125,26 @@ int	ft_atoi(char *nptr,int x);
 char	**ft_split(char *s, char c);
 char	*ft_strdup(char *s);
 char	*ft_strjoin(char  *s1, char *s2);
-///////////////////./././/?////////////////////////////////////////////////////////
-t_step choice (t_pos start, t_pos end);
-void my_mlx_pixel_put(t_img *img, int x, int y, int color);
-void initial_step(t_img *img ,t_pos start,int p,t_step step,int color);
-void nega_decision(t_img *img ,t_line line,int color);
-void posi_decision(t_img *img ,t_line line,int color);
-void draw_myline(t_img *img, int x1, int y1, int x2, int y2, int color_start,int color_end);
-
-int color_lerp(int color_start, int color_end, float t);
-float lerp(float start, float end, float t);
-t_map isometric(int x, int y, int z,int color, int no_color);
-void calculate_min_max_z(t_map_p *s, t_z *z_values);
-void calculate_offsets(t_map_p *s, t_offset *offsets);
-int	handle_keypress(int keysym, t_data *data);
-int get_color(int z, int z_min, int z_max);
-void  scaling (t_map_p *s, t_scale scale);
-void holishiiit (int fd);
+int	ft_isdigit(int x);
+int	ft_isalpha(int c);
+////////////////////// parssing  functions //////////////////////////
+void parse_map (t_fdf *fdf, int fd);
+void parssing (t_fdf *fdf , char **split_line);
+void assigning (t_fdf *fdf, char **ft_split, t_pos *pos, t_index *index);
 unsigned int  char_tohex (char *s,int index);
 size_t	checker_map(char *str);
-t_map_p parssing (int fd);
-void coloring(t_map_p *s, t_z *z_values);
-void draw_lines(t_data *data, t_map_p *s);
-t_map front_view(int x,  int z,int color, int no_color);
-void front (t_map_p *s);
+///////////////////////////// draw functions //////////////////////////
+void  scaling (t_fdf *fdf);
+void scaler_ofsv (t_fdf *fdf);
+void projection (t_fdf *fdf);
+void calculate_offsets(t_fdf *fdf);
+void add_offset(t_fdf *fdf);
+void calculate_min_max_z(t_fdf *fdf);
+void coloring(t_fdf *fdf);
+int get_color(int z, int z_min, int z_max);
+void my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color);
+void draw_lines(t_fdf *fdf);
+
+
 
 #endif

@@ -6,6 +6,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include "minilibx-linux/mlx.h"
 #include <math.h>
 #include <stdlib.h>

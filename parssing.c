@@ -1,21 +1,5 @@
 #include "fdf.h"
 
-// void init_fdf(t_fdf * fdf,char *title)
-// {
-//     fdf->mlx = mlx_init();
-//     fdf->win = mlx_new_window(fdf->mlx, W_W, W_H, title);
-//     if (!fdf->mlx) 
-//         exit(MLX_ERROR);
-//     if (!fdf->win)
-//         exit(MLX_ERROR);
-//     fdf->img.img_ptr = mlx_new_image(fdf->mlx, I_W, I_H);
-//     fdf->img.img_data = mlx_get_data_addr(fdf->img.img_ptr, &fdf->img.bits_per_pixel, &fdf->img.size_line, &fdf->img.endian);
-//     fdf->zoom = 1.0;
-//     fdf->offset.x = W_W / 2;
-//     fdf->offset.y = W_H / 2;
-//     fdf->projection = PROJ_ISO;
-
-// }
 size_t	checker_map(char *str)
 {
 	size_t	x;

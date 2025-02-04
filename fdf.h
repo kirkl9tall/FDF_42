@@ -19,8 +19,8 @@
 
 #define W_W 1920
 #define W_H 1040
-#define I_W 1920
-#define I_H 1040
+#define I_W  W_W
+#define I_H  W_W
 #define MLX_ERROR 1
 
 
@@ -145,6 +145,9 @@ void coloring(t_fdf *fdf);
 int get_color(int z, int z_min, int z_max);
 void my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color);
 void draw_lines(t_fdf *fdf);
+int interpolate_color(int start_color, int end_color, float ratio);
+int clamp(int value);
+
 
 
 

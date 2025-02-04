@@ -57,14 +57,14 @@ void assigning (t_fdf *fdf, char **ft_split, t_pos *pos, t_index *index)
     fdf->map[pos->i][index->index].x = index->index;
     fdf->map[pos->i][index->index].y = pos->i;
     fdf->map[pos->i][index->index].color = 0xFFFFFF;
-    fdf->map[pos->i][index->index].has_color = 0;
+    fdf->map[pos->i][index->index].has_color = 1;
     while (ft_isdigit(ft_split[pos->i][pos->j]) || ft_split[pos->i][pos->j] == '-')
         pos->j++;
     if (ft_split[pos->i][pos->j] == ',')
     {
         pos->j++;
         fdf->map[pos->i][index->index].color = char_tohex(ft_split[pos->i], pos->j);
-        fdf->map[pos->i][index->index].has_color = 1;
+        fdf->map[pos->i][index->index].has_color = 0;
         while (ft_isdigit(ft_split[pos->i][pos->j]) || ft_isalpha(ft_split[pos->i][pos->j]))
             pos->j++;
     }

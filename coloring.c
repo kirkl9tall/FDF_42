@@ -64,4 +64,3 @@ int interpolate_color(int start_color, int end_color, float ratio) {
     return (r << 16) | (g << 8) | b;
 } 
 
-

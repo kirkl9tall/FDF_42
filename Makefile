@@ -1,5 +1,5 @@
 SRCS	=					 get_next_line.c ft_split.c get_next_line_utils.c parssing.c utils_pars.c main.c \
-								dimensionning.c coloring.c drawing.c \
+								dimensionning.c coloring.c drawing.c drawing2.c \
 
 OBJS	=	$(SRCS:.c=.o)
 

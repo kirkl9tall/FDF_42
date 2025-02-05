@@ -30,6 +30,42 @@ int	handle_keypress(int keysym, t_fdf *fdf)
             mlx_destroy_display(fdf->mlx);
         exit(1);
     }
+    if (keysym == XK_I)
+    {
+        fdf->projection = PROJ_ISO;
+        projection(fdf);
+        calculate_offsets(fdf);
+        draw_lines(fdf);
+    }
+    if (keysym == XK_T)
+    {
+        fdf->projection = PROJ_TOP;
+        projection(fdf);
+        calculate_offsets(fdf);
+        draw_lines(fdf);
+    }
+    if (keysym == XK_F)
+    {
+        fdf->projection = PROJ_FRONT;
+        projection(fdf);
+        calculate_offsets(fdf);
+        draw_lines(fdf);
+    }
+    if (keysym == XK_S)
+    {
+        fdf->projection = PROJ_SIDE;
+        projection(fdf);
+        calculate_offsets(fdf);
+        draw_lines(fdf);
+    }
+    if (keysym == XK_plus)
+    {
+        fdf->zoom += 0.1;
+        scaling(fdf);
+        projection(fdf);
+        calculate_offsets(fdf);
+        draw_lines(fdf);
+    }
     return (0);
 }
 

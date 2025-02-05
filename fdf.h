@@ -29,6 +29,16 @@ typedef struct s_pos
     int i;
     int j;
 }   t_pos;
+typedef struct s_line_tools
+{
+    int total_steps;
+    int err;
+    int ystep;
+    float ratio;
+    int color;
+    int current_step;
+}   t_line_tools;
+
 typedef struct ofsset_value
 {
     int x_min;
@@ -147,6 +157,13 @@ void my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color);
 void draw_lines(t_fdf *fdf);
 int interpolate_color(int start_color, int end_color, float ratio);
 int clamp(int value);
+void prepare_line_coordinates(t_point *start, t_point *end, int *steep);
+void karawatcha(t_line_tools * line_tools , t_point *start, t_point *end, int steep, t_line line, t_fdf *fdf);
+void prepare_line_coordinates(t_point *start, t_point *end, int *steep);
+
+
+///////////////////// for test ///////
+
 
 
 

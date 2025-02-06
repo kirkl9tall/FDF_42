@@ -30,47 +30,28 @@ int	handle_keypress(int keysym, t_fdf *fdf)
             mlx_destroy_display(fdf->mlx);
         exit(1);
     }
-    if (keysym == XK_I)
+    if (keysym == XK_i)
     {
         fdf->projection = PROJ_ISO;
-        projection(fdf);
-        calculate_offsets(fdf);
-        draw_lines(fdf);
+        dimension_color(fdf);
+        mlx_put_image_to_window(fdf->mlx,fdf->win,fdf->img.img_ptr,0,0);
+
     }
-    if (keysym == XK_T)
+    if (keysym == XK_t)
     {
         fdf->projection = PROJ_TOP;
-        projection(fdf);
-        calculate_offsets(fdf);
-        draw_lines(fdf);
+        dimension_color(fdf);
+        mlx_put_image_to_window(fdf->mlx,fdf->win,fdf->img.img_ptr,0,0);   
     }
-    if (keysym == XK_F)
-    {
-        fdf->projection = PROJ_FRONT;
-        projection(fdf);
-        calculate_offsets(fdf);
-        draw_lines(fdf);
-    }
-    if (keysym == XK_S)
-    {
-        fdf->projection = PROJ_SIDE;
-        projection(fdf);
-        calculate_offsets(fdf);
-        draw_lines(fdf);
-    }
-    if (keysym == XK_plus)
-    {
-        fdf->zoom += 0.1;
-        scaling(fdf);
-        projection(fdf);
-        calculate_offsets(fdf);
-        draw_lines(fdf);
-    }
+
     return (0);
 }
 
 void dimension_color(t_fdf * fdf)
 {
+    mlx_destroy_image(fdf->mlx, fdf->img.img_ptr);
+    fdf->img.img_ptr = mlx_new_image(fdf->mlx, W_W, W_H);
+    fdf->img.img_data = mlx_get_data_addr(fdf->img.img_ptr, &fdf->img.bits_per_pixel, &fdf->img.size_line, &fdf->img.endian);
     scaler_ofsv(fdf);
     scaling(fdf);
     projection(fdf);

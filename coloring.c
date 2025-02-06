@@ -28,8 +28,8 @@ void coloring(t_fdf *fdf)
         while (j < fdf->width)
 
         {   
-            if (fdf->map[i][j].has_color)
-                fdf->map[i][j].color = get_color(fdf->map[i][j].z, fdf->z_min, fdf->z_max);
+            if (fdf->mapv[i][j].has_color)
+                fdf->mapv[i][j].color = get_color(fdf->mapv[i][j].z, fdf->z_min, fdf->z_max);
             j++;
         }
         i++;

@@ -114,6 +114,7 @@ typedef struct s_fdf
     void *win;
     t_img img;
     t_point **map;
+    t_point **mapv;
     int width;
     int height;
     int z_min;
@@ -144,6 +145,7 @@ void parssing (t_fdf *fdf , char **split_line);
 void assigning (t_fdf *fdf, char **ft_split, t_pos *pos, t_index *index);
 unsigned int  char_tohex (char *s,int index);
 size_t	checker_map(char *str);
+void copy_data (t_fdf *fdf);
 ///////////////////////////// draw functions //////////////////////////
 void  scaling (t_fdf *fdf);
 void scaler_ofsv (t_fdf *fdf);
@@ -163,6 +165,7 @@ void prepare_line_coordinates(t_point *start, t_point *end, int *steep);
 
 
 ///////////////////// for test ///////
+void dimension_color(t_fdf * fdf);
 
 
 

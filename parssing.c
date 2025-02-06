@@ -51,6 +51,7 @@ unsigned int  char_tohex (char *s,int index)
     }
     return (result);
 }
+
 void assigning (t_fdf *fdf, char **ft_split, t_pos *pos, t_index *index)
 {
     fdf->map[pos->i][index->index].z = ft_atoi(ft_split[pos->i], pos->j);
@@ -69,6 +70,35 @@ void assigning (t_fdf *fdf, char **ft_split, t_pos *pos, t_index *index)
             pos->j++;
     }
     index->index++;
+}
+void copy_data (t_fdf *fdf)
+{
+    int x;
+    int y;
+
+    x= 0;
+    fdf->mapv = malloc (sizeof (t_point *)*fdf->height);
+    if (!fdf->mapv)
+        exit(printf("error allocation !"));
+    while (x < fdf->height)
+    {
+        y = 0;
+        fdf->mapv[x]= malloc(sizeof(t_point) * fdf->width);
+
+        if (!fdf->mapv[x])
+            exit(printf("Error: Memory allocation failed for mapv[%d]\n", x));
+
+        while (y < fdf->width)
+        {
+            fdf->mapv[x][y].z = fdf->map[x][y].z;
+            fdf->mapv[x][y].x = fdf->map[x][y].x;
+            fdf->mapv[x][y].y = fdf->map[x][y].y;
+            fdf->mapv[x][y].color = fdf->map[x][y].color;
+            fdf->mapv[x][y].has_color = fdf->map[x][y].has_color;
+            y++;
+        }
+        x++;
+    }
 }
 
 void parssing (t_fdf *fdf , char **split_line)
@@ -118,6 +148,7 @@ void parse_map (t_fdf *fdf, int fd)
         exit(1);
     fdf->height = lines;
     parssing (fdf, split_line);
+    copy_data(fdf);
     for (int i = 0; i < fdf->height; i++)
     free(split_line[i]);
     free(split_line);

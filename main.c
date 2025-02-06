@@ -69,6 +69,16 @@ int	handle_keypress(int keysym, t_fdf *fdf)
     return (0);
 }
 
+void dimension_color(t_fdf * fdf)
+{
+    scaler_ofsv(fdf);
+    scaling(fdf);
+    projection(fdf);
+    calculate_offsets(fdf);
+    calculate_min_max_z(fdf);
+    coloring(fdf);
+    draw_lines(fdf);
+}
 int main ()
 {
     t_fdf *fdf;
@@ -79,25 +89,17 @@ int main ()
     init_fdf(fdf,"new funky test !");
     mlx_key_hook(fdf->win,handle_keypress,fdf);
     parse_map(fdf, fd);
-    scaler_ofsv(fdf);
-    scaling(fdf);
-    projection(fdf);
-    calculate_offsets(fdf);
-    for (int i = 0; i < fdf->height; i++)
-    {
-        for (int j = 0; j < fdf->width; j++)
-        {
-            printf("y = %d \n",fdf->map[i][j].y);
-        }
-    }
-    calculate_min_max_z(fdf);
-    coloring(fdf);
-    draw_lines(fdf);
+    dimension_color(fdf);
+    // scaler_ofsv(fdf);
+    // scaling(fdf);
+    // projection(fdf);
+    // calculate_offsets(fdf);
+    // calculate_min_max_z(fdf);
+    // coloring(fdf);
+    // draw_lines(fdf);
 
     mlx_put_image_to_window(fdf->mlx,fdf->win,fdf->img.img_ptr,0,0);
     mlx_loop(fdf->mlx);
-
-
     ///////////// i ha ve to free every thing  ======free (fdf->map);
     free(fdf);
     return (0);

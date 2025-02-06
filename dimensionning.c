@@ -27,9 +27,9 @@ void  scaling (t_fdf *fdf)
         j = 0;
         while (j < fdf->width)
         {
-            fdf->map[i][j].x *= fdf->scale.x;
-            fdf->map[i][j].y *= fdf->scale.y;
-            fdf->map[i][j].z *= (fdf->scale.x);
+            fdf->mapv[i][j].x *= fdf->scale.x;
+            fdf->mapv[i][j].y *= fdf->scale.y;
+            fdf->mapv[i][j].z *= (fdf->scale.x);
             j++;
         }
         i++;
@@ -52,10 +52,10 @@ void projection (t_fdf *fdf)
             {   
                 origin_x = fdf->map[i][j].x;
                 fdf->map[i][j].x = (fdf->map[i][j].x  - fdf->map[i][j].y ) * cos(0.523599);
-                fdf->map[i][j].y = (origin_x + fdf->map[i][j].y) * sin(0.523599) -fdf->map[i][j].z;
+                fdf->map[i][j].y = (fdf->map[i][j].x + fdf->map[i][j].y) * sin(0.523599) -fdf->map[i][j].z;
             }
             else if (fdf->projection == PROJ_FRONT)
-                fdf->map[i][j].y = fdf->map[i][j].z;
+                fdf->map[i][j].y = -fdf->map[i][j].z;
             else if (fdf->projection == PROJ_SIDE)
                 fdf->map[i][j].y = -fdf->map[i][j].z;
             j++;

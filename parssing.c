@@ -140,6 +140,7 @@ void read_file(t_fdf *fdf)
         arr = get_next_line(fd);
         fdf->line++;
     }
+    free(arr);
     fdf->height = fdf->line;
     close(fd);
     return ;
@@ -169,5 +170,4 @@ void parse_map (t_fdf *fdf, int fd)
         while (fdf->line--)
             free(split_line[fdf->line]);
     free(split_line);
-    free(fdf->argv);
 }

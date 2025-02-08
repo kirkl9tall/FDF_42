@@ -1,18 +1,34 @@
 #include "fdf.h"
 
-void    ft_cleanup(t_fdf * fdf)
+void ft_cleanup(t_fdf *fdf)
 {
     int i;
 
-    i = 0;
-    while (i < fdf->height)
-        free(fdf->map[i++]);
-    i = 0;
-    while (i < fdf->height)
-        free(fdf->mapv[i++]);
-    free(fdf->map);
-    free(fdf->mapv);
-    return ;
+    if (fdf->map)
+    {
+        i = 0;
+        while (i < fdf->height)
+            free(fdf->map[i++]);
+        free(fdf->map);
+    }
+    if (fdf->mapv)
+    {
+        i = 0;
+        while (i < fdf->height)
+            free(fdf->mapv[i++]);
+        free(fdf->mapv);
+    }
+    free(fdf->argv);
+
+    if (fdf->mlx)
+    {
+        if (fdf->img.img_ptr)
+            mlx_destroy_image(fdf->mlx, fdf->img.img_ptr);
+        if (fdf->win)
+            mlx_destroy_window(fdf->mlx, fdf->win);
+        mlx_destroy_display(fdf->mlx);
+    }
+    free(fdf->mlx);
 }
 void init_fdf(t_fdf * fdf,char *title)
 {
@@ -36,17 +52,9 @@ int	handle_keypress(int keysym, t_fdf *fdf)
 
     if (keysym == XK_Escape)
     {   
-        if (fdf->mlx && fdf->img.img_ptr)
-            mlx_destroy_image(fdf->mlx,fdf->img.img_ptr);
-        if (fdf->mlx && fdf->win)
-            mlx_destroy_window(fdf->mlx, fdf->win);
-        if (fdf->mlx)
-        {
-            ft_cleanup(fdf);
-            mlx_destroy_display(fdf->mlx);
-            free (fdf);
-        exit(1);
-        }
+        ft_cleanup(fdf);
+        free(fdf);
+        exit(0);
     }
     if (keysym == XK_i)
     {
@@ -96,6 +104,7 @@ int main (int argc , char *argv[])
         mlx_put_image_to_window(fdf->mlx,fdf->win,fdf->img.img_ptr,0,0);
         mlx_loop(fdf->mlx);
         ft_cleanup(fdf);
+        free(fdf);
     }
     return (0);
 }

@@ -129,7 +129,6 @@ typedef struct s_fdf
     char *argv;
 }   t_fdf;
 
-
 char	*get_next_line(int fd);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(char *str);

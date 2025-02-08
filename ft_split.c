@@ -55,6 +55,7 @@ static char	**amar(char  *s, char **p, char c, int countty)
 		y = 0;
 	}
 	p[z] = NULL;
+	//free(s);
 	return (p);
 }
 

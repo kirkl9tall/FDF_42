@@ -79,14 +79,14 @@ void copy_data (t_fdf *fdf)
     x= 0;
     fdf->mapv = malloc (sizeof (t_point *)*fdf->height);
     if (!fdf->mapv)
-        exit(printf("error allocation !"));
+        return;
     while (x < fdf->height)
     {
         y = 0;
         fdf->mapv[x]= malloc(sizeof(t_point) * fdf->width);
 
         if (!fdf->mapv[x])
-            exit(printf("Error: Memory allocation failed for mapv[%d]\n", x));
+            return;
 
         while (y < fdf->width)
         {
@@ -126,30 +126,48 @@ void parssing (t_fdf *fdf , char **split_line)
     }
     fdf->width = index.words;
 }
+void read_file(t_fdf *fdf)
+{
+    char *arr;
+    int fd;
+
+    fd = open(fdf->argv, O_RDONLY);
+    fdf->line = 0;
+    arr = get_next_line(fd);
+    while (arr)
+    {
+        free(arr);
+        arr = get_next_line(fd);
+        fdf->line++;
+    }
+    fdf->height = fdf->line;
+    close(fd);
+    return ;
+}
 void parse_map (t_fdf *fdf, int fd)
 {
     char *container;
     char * buffer;
     char **split_line;
-    int lines;
 
-    lines = 0;
     container = ft_strdup("");
-    while ((buffer = get_next_line(fd)) != NULL)
+    read_file(fdf);
+    while (fdf->line--)
     {
+        buffer = get_next_line(fd);
         container = ft_strjoin(container, buffer);
-        lines++;
         free(buffer);
     }
     split_line = ft_split(container, '\n');
     free(container);
-    fdf->map = malloc(sizeof(t_point *) * lines );
+    fdf->line = fdf->height;
+    fdf->map = malloc(sizeof(t_point *) * fdf->height );
     if (!fdf->map)
-        exit(1);
-    fdf->height = lines;
+        return;
     parssing (fdf, split_line);
     copy_data(fdf);
-    for (int i = 0; i < fdf->height; i++)
-    free(split_line[i]);
+        while (fdf->line--)
+            free(split_line[fdf->line]);
     free(split_line);
+    free(fdf->argv);
 }

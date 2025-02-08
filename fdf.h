@@ -14,6 +14,7 @@
 #include <X11/X.h>
 #include <X11/keysym.h>
 #include <limits.h>
+#include <string.h>
 
 #define BUFFER_SIZE 1
 
@@ -122,8 +123,10 @@ typedef struct s_fdf
     t_projection projection;
     t_offset offset;
     t_scale scale;
+    int line;
     float zoom;
     t_offset_value ofsset_value;
+    char *argv;
 }   t_fdf;
 
 

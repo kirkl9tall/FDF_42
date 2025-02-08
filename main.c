@@ -1,5 +1,19 @@
 #include "fdf.h"
 
+void    ft_cleanup(t_fdf * fdf)
+{
+    int i;
+
+    i = 0;
+    while (i < fdf->height)
+        free(fdf->map[i++]);
+    i = 0;
+    while (i < fdf->height)
+        free(fdf->mapv[i++]);
+    free(fdf->map);
+    free(fdf->mapv);
+    return ;
+}
 void init_fdf(t_fdf * fdf,char *title)
 {
     fdf->mlx = mlx_init();
@@ -27,8 +41,12 @@ int	handle_keypress(int keysym, t_fdf *fdf)
         if (fdf->mlx && fdf->win)
             mlx_destroy_window(fdf->mlx, fdf->win);
         if (fdf->mlx)
+        {
+            ft_cleanup(fdf);
             mlx_destroy_display(fdf->mlx);
+            free (fdf);
         exit(1);
+        }
     }
     if (keysym == XK_i)
     {
@@ -60,28 +78,24 @@ void dimension_color(t_fdf * fdf)
     coloring(fdf);
     draw_lines(fdf);
 }
-int main ()
+
+int main (int argc , char *argv[])
 {
     t_fdf *fdf;
     int fd;
 
-    fd = open("42.fdf", O_RDONLY);
-    fdf = malloc(sizeof(t_fdf));
-    init_fdf(fdf,"new funky test !");
-    mlx_key_hook(fdf->win,handle_keypress,fdf);
-    parse_map(fdf, fd);
-    dimension_color(fdf);
-    // scaler_ofsv(fdf);
-    // scaling(fdf);
-    // projection(fdf);
-    // calculate_offsets(fdf);
-    // calculate_min_max_z(fdf);
-    // coloring(fdf);
-    // draw_lines(fdf);
-
-    mlx_put_image_to_window(fdf->mlx,fdf->win,fdf->img.img_ptr,0,0);
-    mlx_loop(fdf->mlx);
-    ///////////// i ha ve to free every thing  ======free (fdf->map);
-    free(fdf);
+    if (argc == 2)
+    {
+        fdf = malloc(sizeof(t_fdf));
+        fdf->argv = ft_strdup(argv[1]);
+        fd = open(fdf->argv, O_RDONLY);
+        init_fdf(fdf,"FDF");
+        mlx_key_hook(fdf->win,handle_keypress,fdf);
+        parse_map(fdf, fd);
+        dimension_color(fdf);
+        mlx_put_image_to_window(fdf->mlx,fdf->win,fdf->img.img_ptr,0,0);
+        mlx_loop(fdf->mlx);
+        ft_cleanup(fdf);
+    }
     return (0);
 }

@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/08 21:32:24 by root              #+#    #+#             */
+/*   Updated: 2025/02/08 23:19:13 by root             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "fdf.h"
 
-static int	count_word(char  *s, char c)
+static int	count_word(char *s, char c)
 {
 	int	x;
 	int	count;
@@ -31,7 +42,7 @@ static void	freealloc(char **p, int y)
 	free(p);
 }
 
-static char	**amar(char  *s, char **p, char c, int countty)
+static char	**amar(char *s, char **p, char c, int countty)
 {
 	int	x;
 	int	y;
@@ -55,11 +66,10 @@ static char	**amar(char  *s, char **p, char c, int countty)
 		y = 0;
 	}
 	p[z] = NULL;
-	//free(s);
 	return (p);
 }
 
-static void	allocation(char  *s, char **p, char c)
+static void	allocation(char *s, char **p, char c)
 {
 	int	x;
 	int	y;

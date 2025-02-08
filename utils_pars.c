@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_pars.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/08 21:33:03 by root              #+#    #+#             */
+/*   Updated: 2025/02/08 23:14:45 by root             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
-int	ft_atoi(char *nptr,int x)
+int	ft_atoi(char *nptr, int x)
 {
 	int	signe;
 	int	num;
@@ -32,12 +44,14 @@ int	ft_isalpha(int c)
 		return (1024);
 	return (0);
 }
+
 int	ft_isdigit(int x)
 {
-    if (x >= 48 && x <= 57)
-        return (2048);
-    return (0);
+	if (x >= 48 && x <= 57)
+		return (2048);
+	return (0);
 }
+
 char	*ft_strdup(char *s)
 {
 	char	*p;
@@ -54,4 +68,24 @@ char	*ft_strdup(char *s)
 	}
 	p[x] = '\0';
 	return (p);
+}
+
+void	read_file(t_fdf *fdf)
+{
+	char	*arr;
+	int		fd;
+
+	fd = open(fdf->argv, O_RDONLY);
+	fdf->line = 0;
+	arr = get_next_line(fd);
+	while (arr)
+	{
+		free(arr);
+		arr = get_next_line(fd);
+		fdf->line++;
+	}
+	free(arr);
+	fdf->height = fdf->line;
+	close(fd);
+	return ;
 }

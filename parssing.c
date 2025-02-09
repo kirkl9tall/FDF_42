@@ -136,7 +136,6 @@ void	parse_map(t_fdf *fdf, int fd)
 	if (!fdf->map)
 		return ;
 	parssing(fdf, split_line);
-	copy_data(fdf);
 	while (fdf->line--)
 		free(split_line[fdf->line]);
 	free(split_line);

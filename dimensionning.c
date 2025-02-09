@@ -14,9 +14,8 @@
 
 void	scaler_ofsv(t_fdf *fdf)
 {
-	fdf->scale.x = (I_H / fdf->height / 2) / 2;
-	fdf->scale.y = (I_W / fdf->width / 2) / 2;
-	fdf->scale.z = fdf->scale.x;
+	fdf->scale.x = (W_H / fdf->height / 2) / 1.4;
+	fdf->scale.y = (W_W / fdf->width / 2) / 1.4;
 	if (fdf->scale.x < fdf->scale.y)
 		fdf->scale.y = fdf->scale.x;
 	else
@@ -51,6 +50,7 @@ void	projection(t_fdf *fdf)
 {
 	int	i;
 	int	j;
+	int	pos_x;
 
 	i = 0;
 	while (i < fdf->height)
@@ -60,11 +60,12 @@ void	projection(t_fdf *fdf)
 		{
 			if (fdf->projection == PROJ_ISO)
 			{
-				fdf->mapv[i][j].x = (fdf->map[i][j].x - fdf->map[i][j].y)
+				pos_x = fdf->map[i][j].x;
+				fdf->map[i][j].x = (fdf->map[i][j].x - fdf->map[i][j].y)
 					* cos(0.523599);
-				fdf->mapv[i][j].y = (fdf->map[i][j].x + fdf->map[i][j].y)
+				fdf->map[i][j].y = (pos_x + fdf->map[i][j].y)
 					* sin(0.523599) - fdf->map[i][j].z;
-				fdf->mapv[i][j].z = fdf->map[i][j].z;
+				fdf->map[i][j].z = fdf->map[i][j].z;
 			}
 			j++;
 		}
@@ -83,16 +84,16 @@ void	assign_offset(t_fdf *fdf)
 		j = 0;
 		while (j < fdf->width)
 		{
-			fdf->mapv[i][j].x += fdf->offset.x;
-			fdf->mapv[i][j].y += fdf->offset.y;
-			if (fdf->mapv[i][j].x < fdf->ofsset_value.x_min)
-				fdf->ofsset_value.x_min = fdf->mapv[i][j].x;
-			if (fdf->mapv[i][j].x > fdf->ofsset_value.x_max)
-				fdf->ofsset_value.x_max = fdf->mapv[i][j].x;
-			if (fdf->mapv[i][j].y < fdf->ofsset_value.y_min)
-				fdf->ofsset_value.y_min = fdf->mapv[i][j].y;
-			if (fdf->mapv[i][j].y > fdf->ofsset_value.y_max)
-				fdf->ofsset_value.y_max = fdf->mapv[i][j].y;
+			fdf->map[i][j].x += fdf->offset.x;
+			fdf->map[i][j].y += fdf->offset.y;
+			if (fdf->map[i][j].x < fdf->ofsset_value.x_min)
+				fdf->ofsset_value.x_min = fdf->map[i][j].x;
+			if (fdf->map[i][j].x > fdf->ofsset_value.x_max)
+				fdf->ofsset_value.x_max = fdf->map[i][j].x;
+			if (fdf->map[i][j].y < fdf->ofsset_value.y_min)
+				fdf->ofsset_value.y_min = fdf->map[i][j].y;
+			if (fdf->map[i][j].y > fdf->ofsset_value.y_max)
+				fdf->ofsset_value.y_max = fdf->map[i][j].y;
 			j++;
 		}
 		i++;
@@ -112,10 +113,10 @@ void	calculate_min_max_z(t_fdf *fdf)
 		j = 0;
 		while (j < fdf->width)
 		{
-			if (fdf->mapv[i][j].z < fdf->z_min)
-				fdf->z_min = fdf->mapv[i][j].z;
-			if (fdf->mapv[i][j].z > fdf->z_max)
-				fdf->z_max = fdf->mapv[i][j].z;
+			if (fdf->map[i][j].z < fdf->z_min)
+				fdf->z_min = fdf->map[i][j].z;
+			if (fdf->map[i][j].z > fdf->z_max)
+				fdf->z_max = fdf->map[i][j].z;
 			j++;
 		}
 		i++;

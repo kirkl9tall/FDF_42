@@ -97,12 +97,12 @@ void	draw_lines(t_fdf *fdf)
 		j = -1;
 		while (++j < fdf->width)
 		{
-			my_mlx_pixel_put(fdf, fdf->mapv[i][j].x, fdf->mapv[i][j].y,
-				fdf->mapv[i][j].color);
+			my_mlx_pixel_put(fdf, fdf->map[i][j].x, fdf->map[i][j].y,
+				fdf->map[i][j].color);
 			if (j + 1 < fdf->width)
-				draw_myline(fdf, fdf->mapv[i][j], fdf->mapv[i][j + 1]);
+				draw_myline(fdf, fdf->map[i][j], fdf->map[i][j + 1]);
 			if (i + 1 < fdf->height)
-				draw_myline(fdf, fdf->mapv[i][j], fdf->mapv[i + 1][j]);
+				draw_myline(fdf, fdf->map[i][j], fdf->map[i + 1][j]);
 		}
 	}
 }

@@ -23,34 +23,6 @@ void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	copy_data(t_fdf *fdf)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	fdf->mapv = malloc(sizeof(t_point *) * fdf->height);
-	if (!fdf->mapv)
-		return ;
-	while (x < fdf->height)
-	{
-		y = 0;
-		fdf->mapv[x] = malloc(sizeof(t_point) * fdf->width);
-		if (!fdf->mapv[x])
-			return ;
-		while (y < fdf->width)
-		{
-			fdf->mapv[x][y].z = fdf->map[x][y].z;
-			fdf->mapv[x][y].x = fdf->map[x][y].x;
-			fdf->mapv[x][y].y = fdf->map[x][y].y;
-			fdf->mapv[x][y].color = fdf->map[x][y].color;
-			fdf->mapv[x][y].has_color = fdf->map[x][y].has_color;
-			y++;
-		}
-		x++;
-	}
-}
-
 void	calculate_offsets(t_fdf *fdf)
 {
 	assign_offset(fdf);

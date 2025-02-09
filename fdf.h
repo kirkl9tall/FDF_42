@@ -26,7 +26,7 @@
 # include <string.h>
 # include <unistd.h>
 
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 50
 
 # define W_W 1920
 # define W_H 1040
@@ -126,9 +126,9 @@ typedef struct s_index
 
 typedef struct s_scale
 {
-	int				x;
-	int				y;
-	int				z;
+	float				x;
+	float				y;
+	float				z;
 }					t_scale;
 
 typedef struct s_fdf
@@ -137,7 +137,6 @@ typedef struct s_fdf
 	void			*win;
 	t_img			img;
 	t_point			**map;
-	t_point			**mapv;
 	int				width;
 	int				height;
 	int				z_min;

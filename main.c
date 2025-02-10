@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:32:51 by root              #+#    #+#             */
-/*   Updated: 2025/02/08 23:02:37 by root             ###   ########.fr       */
+/*   Updated: 2025/02/10 22:59:23 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	init_fdf(t_fdf *fdf, char *title)
 	fdf->offset.x = W_W / 2;
 	fdf->offset.y = W_H / 2;
 	fdf->projection = PROJ_ISO;
+	fdf->rot_x = 0.0f;
+    fdf->rot_y = 0.0f;
 }
 
 int	handle_keypress(int keysym, t_fdf *fdf)
@@ -62,6 +64,19 @@ int	handle_keypress(int keysym, t_fdf *fdf)
 		free(fdf);
 		exit(0);
 	}
+	if (keysym == XK_i)
+		{
+			fdf->scale.final *= 1.2;
+			reset_map(fdf);
+			redraw(fdf);
+		}
+    if (keysym == XK_o) 
+	{
+		fdf->scale.final /= 1.2;
+		copy_data(fdf);
+		 redraw(fdf);
+	}
+	
 	return (0);
 }
 

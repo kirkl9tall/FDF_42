@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:34 by root              #+#    #+#             */
-/*   Updated: 2025/02/08 23:18:22 by root             ###   ########.fr       */
+/*   Updated: 2025/02/10 15:34:20 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,14 @@ void	draw_lines(t_fdf *fdf)
 	{
 		j = -1;
 		while (++j < fdf->width)
-		{
-			my_mlx_pixel_put(fdf, fdf->map[i][j].x, fdf->map[i][j].y,
+		{	 
+
+			my_mlx_pixel_put(fdf, fdf->mapv[i][j].x, fdf->mapv[i][j].y,
 				fdf->map[i][j].color);
 			if (j + 1 < fdf->width)
-				draw_myline(fdf, fdf->map[i][j], fdf->map[i][j + 1]);
+				draw_myline(fdf, fdf->mapv[i][j], fdf->mapv[i][j + 1]);
 			if (i + 1 < fdf->height)
-				draw_myline(fdf, fdf->map[i][j], fdf->map[i + 1][j]);
+				draw_myline(fdf, fdf->mapv[i][j], fdf->mapv[i + 1][j]);
 		}
 	}
 }

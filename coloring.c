@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:26 by root              #+#    #+#             */
-/*   Updated: 2025/02/08 22:01:57 by root             ###   ########.fr       */
+/*   Updated: 2025/02/10 00:33:56 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void	coloring(t_fdf *fdf)
 		j = 0;
 		while (j < fdf->width)
 		{
-			if (fdf->map[i][j].has_color)
-				fdf->map[i][j].color = get_color(fdf->map[i][j].z, fdf->z_min,
+			if (fdf->mapv[i][j].has_color)
+				fdf->mapv[i][j].color = get_color(fdf->mapv[i][j].z, fdf->z_min,
 						fdf->z_max);
 			j++;
 		}

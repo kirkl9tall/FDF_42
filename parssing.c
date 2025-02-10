@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:32:54 by root              #+#    #+#             */
-/*   Updated: 2025/02/08 22:54:59 by root             ###   ########.fr       */
+/*   Updated: 2025/02/10 00:27:34 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ void	parse_map(t_fdf *fdf, int fd)
 	if (!fdf->map)
 		return ;
 	parssing(fdf, split_line);
+	copy_data(fdf);
 	while (fdf->line--)
 		free(split_line[fdf->line]);
 	free(split_line);

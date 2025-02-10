@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:45 by root              #+#    #+#             */
-/*   Updated: 2025/02/08 23:19:50 by root             ###   ########.fr       */
+/*   Updated: 2025/02/10 22:58:54 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 
 # define W_W 1920
 # define W_H 1040
-# define I_W W_W
-# define I_H W_W
+# define I_W 1920
+# define I_H 1040
 # define MLX_ERROR 1
 
 typedef struct s_colors
@@ -129,6 +129,7 @@ typedef struct s_scale
 	float				x;
 	float				y;
 	float				z;
+	float				final;
 }					t_scale;
 
 typedef struct s_fdf
@@ -137,6 +138,7 @@ typedef struct s_fdf
 	void			*win;
 	t_img			img;
 	t_point			**map;
+	t_point			**mapv;
 	int				width;
 	int				height;
 	int				z_min;
@@ -150,6 +152,8 @@ typedef struct s_fdf
 	char			*argv;
 	t_line_tools	line_tools;
 	t_line			line_pixel;
+	float 			rot_x;
+	float 			rot_y;
 }					t_fdf;
 
 char				*get_next_line(int fd);
@@ -198,5 +202,7 @@ void				read_file(t_fdf *fdf);
 ///////////////////// for test ///////
 void				dimension_color(t_fdf *fdf);
 void				assign_offset(t_fdf *fdf);
-
+int 				is_outside_window(int x, int y, int width, int height);
+void 				redraw(t_fdf *fdf);
+void				reset_map (t_fdf *fdf);
 #endif

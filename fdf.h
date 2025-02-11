@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:45 by root              #+#    #+#             */
-/*   Updated: 2025/02/10 22:58:54 by root             ###   ########.fr       */
+/*   Updated: 2025/02/11 20:21:59 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,8 @@ typedef struct s_fdf
 	char			*argv;
 	t_line_tools	line_tools;
 	t_line			line_pixel;
-	float 			rot_x;
-	float 			rot_y;
+	float			rot_x;
+	float			rot_y;
 }					t_fdf;
 
 char				*get_next_line(int fd);
@@ -202,7 +202,10 @@ void				read_file(t_fdf *fdf);
 ///////////////////// for test ///////
 void				dimension_color(t_fdf *fdf);
 void				assign_offset(t_fdf *fdf);
-int 				is_outside_window(int x, int y, int width, int height);
-void 				redraw(t_fdf *fdf);
-void				reset_map (t_fdf *fdf);
+int					is_outside_window(int x, int y, int width, int height);
+void				redraw(t_fdf *fdf);
+void				reset_map(t_fdf *fdf);
+void				apply_rotation(t_fdf *fdf);
+void				rotate_x(t_point *point, float angle);
+void				rotate_y(t_point *point, float angle);
 #endif

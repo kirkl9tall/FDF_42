@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:31 by root              #+#    #+#             */
-/*   Updated: 2025/02/10 22:52:51 by root             ###   ########.fr       */
+/*   Updated: 2025/02/11 20:32:30 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 void	scaler_ofsv(t_fdf *fdf)
 {
-	fdf->scale.x = (I_H / fdf->height / 2)  ;
-	fdf->scale.y = (I_W / fdf->width / 2)  ;
+	fdf->scale.x = (I_H / fdf->height / 2);
+	fdf->scale.y = (I_W / fdf->width / 2);
 	if (fdf->scale.x < fdf->scale.y)
 		fdf->scale.y = fdf->scale.x;
 	else
 		fdf->scale.x = fdf->scale.y;
-		
 	fdf->scale.final = fdf->scale.x;
 }
 
@@ -48,6 +47,8 @@ void	projection(t_fdf *fdf)
 {
 	int	i;
 	int	j;
+	int	x;
+	int	y;
 
 	i = 0;
 	while (i < fdf->height)
@@ -57,13 +58,10 @@ void	projection(t_fdf *fdf)
 		{
 			if (fdf->projection == PROJ_ISO)
 			{
-				int previous_x = fdf->mapv[i][j].x;
-				
-				fdf->mapv[i][j].x = (fdf->mapv[i][j].x - fdf->mapv[i][j].y)
-					* cos(0.523599);
-				fdf->mapv[i][j].y = (previous_x + fdf->mapv[i][j].y)
-					* sin(0.523599) - fdf->mapv[i][j].z;
-				fdf->mapv[i][j].z = fdf->mapv[i][j].z;
+				x = fdf->mapv[i][j].x;
+				y = fdf->mapv[i][j].y;
+				fdf->mapv[i][j].x = (x - y) * cos(0.523599);
+				fdf->mapv[i][j].y = (x + y) * sin(0.523599) - fdf->mapv[i][j].z;
 			}
 			j++;
 		}

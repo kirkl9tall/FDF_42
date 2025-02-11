@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:37 by root              #+#    #+#             */
-/*   Updated: 2025/02/10 22:52:07 by root             ###   ########.fr       */
+/*   Updated: 2025/02/11 20:44:17 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,83 +23,85 @@ void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void reassign_offset(t_fdf *fdf)
+void	reassign_offset(t_fdf *fdf)
 {
-    int i;
-    int j;
+	int	i;
+	int	j;
 
-    i = 0;
-    while (i < fdf->height)
-    {
-        j = 0;
-        while (j < fdf->width)
-        {
-            fdf->mapv[i][j].x += fdf->offset.x;
-            fdf->mapv[i][j].y += fdf->offset.y;
-            j++;
-        }
-        i++;
-    }
+	i = 0;
+	while (i < fdf->height)
+	{
+		j = 0;
+		while (j < fdf->width)
+		{
+			fdf->mapv[i][j].x += fdf->offset.x;
+			fdf->mapv[i][j].y += fdf->offset.y;
+			j++;
+		}
+		i++;
+	}
 }
+
 void	calculate_offsets(t_fdf *fdf)
 {
-    fdf->ofsset_value.x_min = INT_MAX;
-    fdf->ofsset_value.y_min = INT_MAX;
-    fdf->ofsset_value.x_max = INT_MIN;
-    fdf->ofsset_value.y_max = INT_MIN;
+	fdf->ofsset_value.x_min = INT_MAX;
+	fdf->ofsset_value.y_min = INT_MAX;
+	fdf->ofsset_value.x_max = INT_MIN;
+	fdf->ofsset_value.y_max = INT_MIN;
 	assign_offset(fdf);
 	fdf->offset.x = (I_W / 2) - (fdf->ofsset_value.x_max
 			+ fdf->ofsset_value.x_min) / 2;
 	fdf->offset.y = (I_H / 2) - (fdf->ofsset_value.y_max
 			+ fdf->ofsset_value.y_min) / 2;
-    reassign_offset(fdf);
-}
-void copy_data (t_fdf *fdf)
-{
-    int x;
-    int y;
-
-    x= 0;
-    fdf->mapv = malloc (sizeof (t_point *)*fdf->height);
-    if (!fdf->mapv)
-        return;
-    while (x < fdf->height)
-    {
-        y = 0;
-        fdf->mapv[x]= malloc(sizeof(t_point) * fdf->width);
-        if (!fdf->mapv[x])
-            return;
-        while (y < fdf->width)
-        {
-            fdf->mapv[x][y].z = fdf->map[x][y].z;
-            fdf->mapv[x][y].x = fdf->map[x][y].x;
-            fdf->mapv[x][y].y = fdf->map[x][y].y;
-            fdf->mapv[x][y].color = fdf->map[x][y].color;
-            fdf->mapv[x][y].has_color = fdf->map[x][y].has_color;
-            y++;
-        }
-        x++;
-    }
+	reassign_offset(fdf);
 }
 
-void reset_map (t_fdf *fdf)
+void	copy_data(t_fdf *fdf)
 {
-    int x;
-    int y;
+	int	x;
+	int	y;
 
-    x = 0;
-    while (x < fdf->height)
-    {
-        y = 0;
-        while (y < fdf->width)
-        {
-            fdf->mapv[x][y].z = fdf->map[x][y].z;
-            fdf->mapv[x][y].x = fdf->map[x][y].x;
-            fdf->mapv[x][y].y = fdf->map[x][y].y;
-            fdf->mapv[x][y].color = fdf->map[x][y].color;
-            fdf->mapv[x][y].has_color = fdf->map[x][y].has_color;
-            y++;
-        }
-        x++;
-    }
+	x = 0;
+	fdf->mapv = malloc (sizeof (t_point *) * fdf->height);
+	if (!fdf->mapv)
+		return ;
+	while (x < fdf->height)
+	{
+		y = 0;
+		fdf->mapv[x] = malloc(sizeof(t_point) * fdf->width);
+		if (!fdf->mapv[x])
+			return ;
+		while (y < fdf->width)
+		{
+			fdf->mapv[x][y].z = fdf->map[x][y].z;
+			fdf->mapv[x][y].x = fdf->map[x][y].x;
+			fdf->mapv[x][y].y = fdf->map[x][y].y;
+			fdf->mapv[x][y].color = fdf->map[x][y].color;
+			fdf->mapv[x][y].has_color = fdf->map[x][y].has_color;
+			y++;
+		}
+		x++;
+	}
+}
+
+void	reset_map(t_fdf *fdf)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	while (x < fdf->height)
+	{
+		y = 0;
+		while (y < fdf->width)
+		{
+			fdf->mapv[x][y].z = fdf->map[x][y].z;
+			fdf->mapv[x][y].x = fdf->map[x][y].x;
+			fdf->mapv[x][y].y = fdf->map[x][y].y;
+			fdf->mapv[x][y].color = fdf->map[x][y].color;
+			fdf->mapv[x][y].has_color = fdf->map[x][y].has_color;
+			y++;
+		}
+		x++;
+	}
 }

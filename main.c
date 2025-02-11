@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:32:51 by root              #+#    #+#             */
-/*   Updated: 2025/02/10 22:59:23 by root             ###   ########.fr       */
+/*   Updated: 2025/02/11 20:29:29 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	init_fdf(t_fdf *fdf, char *title)
 	fdf->offset.y = W_H / 2;
 	fdf->projection = PROJ_ISO;
 	fdf->rot_x = 0.0f;
-    fdf->rot_y = 0.0f;
+	fdf->rot_y = 0.0f;
 }
 
 int	handle_keypress(int keysym, t_fdf *fdf)
@@ -65,19 +65,24 @@ int	handle_keypress(int keysym, t_fdf *fdf)
 		exit(0);
 	}
 	if (keysym == XK_i)
-		{
-			fdf->scale.final *= 1.2;
-			reset_map(fdf);
-			redraw(fdf);
-		}
-    if (keysym == XK_o) 
+	{
+		fdf->scale.final *= 1.2;
+		reset_map(fdf);
+	}
+	if (keysym == XK_o)
 	{
 		fdf->scale.final /= 1.2;
-		copy_data(fdf);
-		 redraw(fdf);
+		reset_map(fdf);
 	}
-	
-	return (0);
+	if (keysym == XK_a)
+		fdf->rot_y -= 0.1;
+	if (keysym == XK_d)
+		fdf->rot_y += 0.1;
+	if (keysym == XK_w)
+		fdf->rot_x -= 0.1f;
+	if (keysym == XK_s)
+		fdf->rot_x += 0.1f;
+	redraw(fdf);
 }
 
 void	dimension_color(t_fdf *fdf)

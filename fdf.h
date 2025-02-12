@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:45 by root              #+#    #+#             */
-/*   Updated: 2025/02/11 20:21:59 by root             ###   ########.fr       */
+/*   Updated: 2025/02/12 00:47:24 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,8 @@ typedef struct s_fdf
 	t_line			line_pixel;
 	float			rot_x;
 	float			rot_y;
+	float			trans_x;
+    float			trans_y;
 }					t_fdf;
 
 char				*get_next_line(int fd);
@@ -208,4 +210,9 @@ void				reset_map(t_fdf *fdf);
 void				apply_rotation(t_fdf *fdf);
 void				rotate_x(t_point *point, float angle);
 void				rotate_y(t_point *point, float angle);
+void				top_projection(t_fdf *fdf, int i, int j);
+void				front_projection(t_fdf *fdf, int i, int j);
+void				iso_projection(t_fdf *fdf, int i, int j);
+void				side_projection(t_fdf *fdf, int i, int j);
+void				reset(t_fdf *fdf);
 #endif

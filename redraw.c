@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 20:11:21 by root              #+#    #+#             */
-/*   Updated: 2025/02/11 20:19:44 by root             ###   ########.fr       */
+/*   Updated: 2025/02/11 23:52:26 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,25 @@ void	rotate_x(t_point *point, float angle)
 {
 	float	y;
 	float	z;
-
+	
 	y = point->y;
 	z = point->z;
 	point->y = y * cos(angle) - z * sin(angle);
 	point->z = y * sin(angle) + z * cos(angle);
 }
 
-void	rotate_y(t_point *point, float angle)
+void rotate_y(t_point *point, float angle)
 {
-	float	y;
-	float	z;
-
-	y = point->y;
+	float x;
+	float z;
+	
+	x = point->x;
 	z = point->z;
 	point->x = x * cos(angle) + z * sin(angle);
 	point->z = -x * sin(angle) + z * cos(angle);
 }
 
-void	apply_rotation(t_fdf *fdf)
+void apply_rotation(t_fdf *fdf)
 {
 	int	i;
 	int	j;

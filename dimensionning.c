@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:31 by root              #+#    #+#             */
-/*   Updated: 2025/02/11 20:32:30 by root             ###   ########.fr       */
+/*   Updated: 2025/02/12 00:19:55 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ void	projection(t_fdf *fdf)
 {
 	int	i;
 	int	j;
-	int	x;
-	int	y;
 
 	i = 0;
 	while (i < fdf->height)
@@ -58,10 +56,19 @@ void	projection(t_fdf *fdf)
 		{
 			if (fdf->projection == PROJ_ISO)
 			{
-				x = fdf->mapv[i][j].x;
-				y = fdf->mapv[i][j].y;
-				fdf->mapv[i][j].x = (x - y) * cos(0.523599);
-				fdf->mapv[i][j].y = (x + y) * sin(0.523599) - fdf->mapv[i][j].z;
+				iso_projection(fdf, i, j);
+			}
+			else if (fdf->projection == PROJ_TOP)
+			{
+				top_projection(fdf, i, j);
+			}
+			else if (fdf->projection == PROJ_SIDE)
+			{
+				side_projection(fdf, i, j);
+			}
+			else if (fdf->projection == PROJ_FRONT)
+			{
+				front_projection(fdf, i, j);
 			}
 			j++;
 		}

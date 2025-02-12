@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:32:51 by root              #+#    #+#             */
-/*   Updated: 2025/02/11 20:29:29 by root             ###   ########.fr       */
+/*   Updated: 2025/02/12 00:56:09 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	init_fdf(t_fdf *fdf, char *title)
 	fdf->projection = PROJ_ISO;
 	fdf->rot_x = 0.0f;
 	fdf->rot_y = 0.0f;
+	fdf->trans_x = 0;
+	fdf->trans_y = 0;
 }
 
 int	handle_keypress(int keysym, t_fdf *fdf)
@@ -64,25 +66,39 @@ int	handle_keypress(int keysym, t_fdf *fdf)
 		free(fdf);
 		exit(0);
 	}
-	if (keysym == XK_i)
-	{
+	if (keysym == XK_p)
 		fdf->scale.final *= 1.2;
-		reset_map(fdf);
-	}
-	if (keysym == XK_o)
-	{
+	if (keysym == XK_m)
 		fdf->scale.final /= 1.2;
-		reset_map(fdf);
-	}
+
 	if (keysym == XK_a)
 		fdf->rot_y -= 0.1;
 	if (keysym == XK_d)
 		fdf->rot_y += 0.1;
-	if (keysym == XK_w)
+	if (keysym == XK_w)	
 		fdf->rot_x -= 0.1f;
 	if (keysym == XK_s)
 		fdf->rot_x += 0.1f;
+	if (keysym == XK_i)
+		fdf->projection = PROJ_ISO;
+	if (keysym == XK_f)
+		fdf->projection = PROJ_FRONT;
+	if (keysym == XK_t)
+		fdf->projection = PROJ_TOP;
+	if (keysym == XK_c)
+		fdf->projection = PROJ_SIDE;
+	if (keysym == XK_r)
+	{
+		reset(fdf);
+		redraw(fdf);
+	}
+	if (keysym == XK_Left)  fdf->trans_x -= 10;
+    if (keysym == XK_Right) fdf->trans_x += 10;
+    if (keysym == XK_Up)    fdf->trans_y -= 10;
+    if (keysym == XK_Down)  fdf->trans_y += 10;
+	reset_map(fdf);
 	redraw(fdf);
+	return(0);
 }
 
 void	dimension_color(t_fdf *fdf)

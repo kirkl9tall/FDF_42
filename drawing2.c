@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:37 by root              #+#    #+#             */
-/*   Updated: 2025/02/11 20:44:17 by root             ###   ########.fr       */
+/*   Updated: 2025/02/12 00:52:02 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ void	calculate_offsets(t_fdf *fdf)
 	fdf->ofsset_value.y_max = INT_MIN;
 	assign_offset(fdf);
 	fdf->offset.x = (I_W / 2) - (fdf->ofsset_value.x_max
-			+ fdf->ofsset_value.x_min) / 2;
+			+ fdf->ofsset_value.x_min) / 2 + fdf->trans_x;
 	fdf->offset.y = (I_H / 2) - (fdf->ofsset_value.y_max
-			+ fdf->ofsset_value.y_min) / 2;
+			+ fdf->ofsset_value.y_min) / 2 + fdf->trans_y;
 	reassign_offset(fdf);
 }
 

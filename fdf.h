@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:45 by root              #+#    #+#             */
-/*   Updated: 2025/02/12 00:47:24 by root             ###   ########.fr       */
+/*   Updated: 2025/02/12 16:07:53 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@
 
 # define BUFFER_SIZE 50
 
-# define W_W 1920
+# define W_W 1900
 # define W_H 1040
-# define I_W 1920
+# define I_W 1900
 # define I_H 1040
 # define MLX_ERROR 1
 
@@ -201,7 +201,7 @@ void				prepare_line_coordinates(t_point *start, t_point *end,
 void				draw_line_pixel(t_fdf *fdf, t_point start, t_point end,
 						int steep);
 void				read_file(t_fdf *fdf);
-///////////////////// for test ///////
+/////////////////////  dimension  and color  and  key press  hooks ///////////////
 void				dimension_color(t_fdf *fdf);
 void				assign_offset(t_fdf *fdf);
 int					is_outside_window(int x, int y, int width, int height);
@@ -215,4 +215,8 @@ void				front_projection(t_fdf *fdf, int i, int j);
 void				iso_projection(t_fdf *fdf, int i, int j);
 void				side_projection(t_fdf *fdf, int i, int j);
 void				reset(t_fdf *fdf);
+void				draw_menu_background(t_fdf *fdf);
+void				trans_key(int keysym, t_fdf *fdf);
+void				proj_key(int keysym, t_fdf *fdf);
+void				rot_key(int keysym, t_fdf *fdf);
 #endif

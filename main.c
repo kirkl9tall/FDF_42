@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:32:51 by root              #+#    #+#             */
-/*   Updated: 2025/02/12 00:56:09 by root             ###   ########.fr       */
+/*   Updated: 2025/02/12 16:09:46 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,32 +70,14 @@ int	handle_keypress(int keysym, t_fdf *fdf)
 		fdf->scale.final *= 1.2;
 	if (keysym == XK_m)
 		fdf->scale.final /= 1.2;
-
-	if (keysym == XK_a)
-		fdf->rot_y -= 0.1;
-	if (keysym == XK_d)
-		fdf->rot_y += 0.1;
-	if (keysym == XK_w)	
-		fdf->rot_x -= 0.1f;
-	if (keysym == XK_s)
-		fdf->rot_x += 0.1f;
-	if (keysym == XK_i)
-		fdf->projection = PROJ_ISO;
-	if (keysym == XK_f)
-		fdf->projection = PROJ_FRONT;
-	if (keysym == XK_t)
-		fdf->projection = PROJ_TOP;
-	if (keysym == XK_c)
-		fdf->projection = PROJ_SIDE;
+	if (keysym == XK_a || keysym == XK_d || keysym == XK_w || keysym == XK_s )
+		rot_key(keysym,fdf);
+	if (keysym == XK_i || keysym == XK_f || keysym == XK_t || keysym == XK_c)
+		proj_key(keysym,fdf);
+	if (keysym == XK_Left || keysym == XK_Right || keysym == XK_Up || keysym == XK_Down) 
+		trans_key(keysym,fdf);
 	if (keysym == XK_r)
-	{
 		reset(fdf);
-		redraw(fdf);
-	}
-	if (keysym == XK_Left)  fdf->trans_x -= 10;
-    if (keysym == XK_Right) fdf->trans_x += 10;
-    if (keysym == XK_Up)    fdf->trans_y -= 10;
-    if (keysym == XK_Down)  fdf->trans_y += 10;
 	reset_map(fdf);
 	redraw(fdf);
 	return(0);
@@ -116,13 +98,14 @@ int	main(int argc, char *argv[])
 {
 	t_fdf	*fdf;
 	int		fd;
-
+	
 	if (argc == 2)
 	{
 		fdf = malloc(sizeof(t_fdf));
 		fdf->argv = ft_strdup(argv[1]);
 		fd = open(fdf->argv, O_RDONLY);
 		init_fdf(fdf, "FDF");
+		//draw_menu_background(fdf);
 		mlx_key_hook(fdf->win, handle_keypress, fdf);
 		parse_map(fdf, fd);
 		dimension_color(fdf);
@@ -133,3 +116,12 @@ int	main(int argc, char *argv[])
 	}
 	return (0);
 }
+void draw_menu_background(t_fdf *fdf) 
+{
+    for (int y = 0; y < 1040; y++) {
+        for (int x = 0; x < 400; x++) {
+            my_mlx_pixel_put(fdf, x, y, 0x2A2A2A); // Dark gray
+        }
+    }
+}
+

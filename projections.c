@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 00:12:26 by root              #+#    #+#             */
-/*   Updated: 2025/02/12 00:34:33 by root             ###   ########.fr       */
+/*   Updated: 2025/02/12 16:11:24 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	reset(t_fdf *fdf)
 	scaling(fdf);
     fdf->rot_x = 0.0f;
 	fdf->rot_y = 0.0f;
+    fdf->projection = PROJ_ISO;
 	apply_rotation(fdf);
 	projection(fdf);
 	calculate_offsets(fdf);

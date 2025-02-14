@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:45 by root              #+#    #+#             */
-/*   Updated: 2025/02/12 16:07:53 by root             ###   ########.fr       */
+/*   Updated: 2025/02/15 00:48:27 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,6 +202,7 @@ void				prepare_line_coordinates(t_point *start, t_point *end,
 void				draw_line_pixel(t_fdf *fdf, t_point start, t_point end,
 						int steep);
 void				read_file(t_fdf *fdf);
+int					handle_keypress(int keysym, t_fdf *fdf);
 /////////////////////  dimension  and color  and  key press  hooks
 	///////////////
 void				dimension_color(t_fdf *fdf);
@@ -228,5 +229,5 @@ int					close_window(t_fdf *fdf);
 void				load_menu_image(t_fdf *fdf);
 void				ft_cleanup(t_fdf *fdf);
 void				*ft_memset(void *s, int c, size_t n);
-
+void				initial_fdf(char *argv);
 #endif

@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:32:51 by root              #+#    #+#             */
-/*   Updated: 2025/02/12 16:09:46 by root             ###   ########.fr       */
+/*   Updated: 2025/02/14 23:42:09 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	main(int argc, char *argv[])
 
 	if (argc == 2)
 	{
-		
+		initial_fdf(argv[1]);
 		fdf = malloc(sizeof(t_fdf));
 		fdf->argv = ft_strdup(argv[1]);
 		fd = open(fdf->argv, O_RDONLY);
@@ -116,7 +116,7 @@ int	main(int argc, char *argv[])
 		mlx_hook(fdf->win, 17, 0, close_window, fdf);
 		parse_map(fdf, fd);
 		dimension_color(fdf);
-		mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img.img_ptr, 0, 0);
+		mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img.img_ptr, 400, 0);
 		mlx_loop(fdf->mlx);
 		ft_cleanup(fdf);
 		free(fdf);

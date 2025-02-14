@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:31:31 by root              #+#    #+#             */
-/*   Updated: 2025/02/12 00:19:55 by root             ###   ########.fr       */
+/*   Updated: 2025/02/15 00:45:32 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,16 @@
 
 void	scaler_ofsv(t_fdf *fdf)
 {
-	fdf->scale.x = (I_H / fdf->height / 2);
-	fdf->scale.y = (I_W / fdf->width / 2);
+	if (fdf->height >= 250 || fdf->width >= 250)
+	{
+		fdf->scale.x = (I_H / fdf->height / 2);
+		fdf->scale.y = (I_W / fdf->width / 2);
+	}
+	else
+	{
+		fdf->scale.x = (I_H / fdf->height / 2) / 1.5;
+		fdf->scale.y = (I_W / fdf->width / 2) / 1.5;
+	}
 	if (fdf->scale.x < fdf->scale.y)
 		fdf->scale.y = fdf->scale.x;
 	else

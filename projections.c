@@ -40,19 +40,36 @@ void side_projection(t_fdf *fdf, int i, int j)
     fdf->mapv[i][j].y = -fdf->mapv[i][j].z;
 }
 
+void	*ft_memset(void *s, int c, size_t n)
+{
+	size_t	x;
+
+	x = 0;
+	while (x < n)
+	{
+		((unsigned char *)s)[x] = (unsigned char)c;
+		x++;
+	}
+	return (s);
+}
 void	reset(t_fdf *fdf)
 {
-	memset(fdf->img.img_data, 0, W_W * W_H * (fdf->img.bits_per_pixel / 8));
+	ft_memset(fdf->img.img_data, 0, W_W * W_H * (fdf->img.bits_per_pixel / 8));
     scaler_ofsv(fdf);
 	scaling(fdf);
     fdf->rot_x = 0.0f;
 	fdf->rot_y = 0.0f;
+	fdf->trans_x = 0;
+	fdf->trans_y = 0;
     fdf->projection = PROJ_ISO;
+	draw_menu_background(fdf); // Draw menu background
+    draw_menu_image(fdf);
 	apply_rotation(fdf);
 	projection(fdf);
 	calculate_offsets(fdf);
 	calculate_min_max_z(fdf);
 	coloring(fdf);
 	draw_lines(fdf);
-	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img.img_ptr, 0, 0);
+    mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->menu.img_ptr, 0, 0);
+	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img.img_ptr, 400, 0);
 }

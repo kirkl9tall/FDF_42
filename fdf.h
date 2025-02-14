@@ -29,9 +29,9 @@
 # define BUFFER_SIZE 50
 
 # define W_W 1900
-# define W_H 1040
+# define W_H 1000
 # define I_W 1900
-# define I_H 1040
+# define I_H 1000
 # define MLX_ERROR 1
 
 typedef struct s_colors
@@ -137,6 +137,7 @@ typedef struct s_fdf
 	void			*mlx;
 	void			*win;
 	t_img			img;
+	t_img			menu;
 	t_point			**map;
 	t_point			**mapv;
 	int				width;
@@ -156,6 +157,7 @@ typedef struct s_fdf
 	float			rot_y;
 	float			trans_x;
     float			trans_y;
+	t_img			logo;
 }					t_fdf;
 
 char				*get_next_line(int fd);
@@ -219,4 +221,7 @@ void				draw_menu_background(t_fdf *fdf);
 void				trans_key(int keysym, t_fdf *fdf);
 void				proj_key(int keysym, t_fdf *fdf);
 void				rot_key(int keysym, t_fdf *fdf);
+void				put_menu(t_fdf *fdf, int x, int y, int color);
+void 				load_menu_image(t_fdf *fdf);
+void 				draw_menu_image(t_fdf *fdf);
 #endif

@@ -12,64 +12,51 @@
 
 #include "fdf.h"
 
-void iso_projection (t_fdf *fdf, int i, int j)
+void	iso_projection(t_fdf *fdf, int i, int j)
 {
-    int	x;
+	int	x;
 	int	y;
-    
-    x = fdf->mapv[i][j].x;
-    y = fdf->mapv[i][j].y;
-    fdf->mapv[i][j].x = (x - y) * cos(0.523599);
-    fdf->mapv[i][j].y = (x + y) * sin(0.523599) - fdf->mapv[i][j].z;
+
+	x = fdf->mapv[i][j].x;
+	y = fdf->mapv[i][j].y;
+	fdf->mapv[i][j].x = (x - y) * cos(0.523599);
+	fdf->mapv[i][j].y = (x + y) * sin(0.523599) - fdf->mapv[i][j].z;
 }
 
-void front_projection(t_fdf *fdf, int i, int j)
+void	front_projection(t_fdf *fdf, int i, int j)
 {
-    fdf->mapv[i][j].x = fdf->mapv[i][j].x;
-    fdf->mapv[i][j].y = fdf->mapv[i][j].z;
+	fdf->mapv[i][j].x = fdf->mapv[i][j].x;
+	fdf->mapv[i][j].y = fdf->mapv[i][j].z;
 }
 
-void top_projection(t_fdf *fdf, int i, int j)
+void	top_projection(t_fdf *fdf, int i, int j)
 {
-    fdf->mapv[i][j].x = fdf->mapv[i][j].x;
-    fdf->mapv[i][j].y = fdf->mapv[i][j].y;
-}
-void side_projection(t_fdf *fdf, int i, int j)
-{
-    fdf->mapv[i][j].x = fdf->mapv[i][j].y;
-    fdf->mapv[i][j].y = -fdf->mapv[i][j].z;
+	fdf->mapv[i][j].x = fdf->mapv[i][j].x;
+	fdf->mapv[i][j].y = fdf->mapv[i][j].y;
 }
 
-void	*ft_memset(void *s, int c, size_t n)
+void	side_projection(t_fdf *fdf, int i, int j)
 {
-	size_t	x;
-
-	x = 0;
-	while (x < n)
-	{
-		((unsigned char *)s)[x] = (unsigned char)c;
-		x++;
-	}
-	return (s);
+	fdf->mapv[i][j].x = fdf->mapv[i][j].y;
+	fdf->mapv[i][j].y = -fdf->mapv[i][j].z;
 }
+
 void	reset(t_fdf *fdf)
 {
 	ft_memset(fdf->img.img_data, 0, W_W * W_H * (fdf->img.bits_per_pixel / 8));
-    scaler_ofsv(fdf);
+	scaler_ofsv(fdf);
 	scaling(fdf);
-    fdf->rot_x = 0.0f;
+	fdf->rot_x = 0.0f;
 	fdf->rot_y = 0.0f;
 	fdf->trans_x = 0;
 	fdf->trans_y = 0;
-    fdf->projection = PROJ_ISO;
-	draw_menu_background(fdf); // Draw menu background
-    draw_menu_image(fdf);
+	fdf->projection = PROJ_ISO;
+	draw_menu_image(fdf);
 	apply_rotation(fdf);
 	projection(fdf);
 	calculate_offsets(fdf);
 	calculate_min_max_z(fdf);
 	coloring(fdf);
 	draw_lines(fdf);
-    mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->menu.img_ptr, 0, 0);
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img.img_ptr, 400, 0);
 }

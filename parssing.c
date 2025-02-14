@@ -99,7 +99,7 @@ void	parssing(t_fdf *fdf, char **split_line)
 		index.words = checker_map(split_line[pos.i]);
 		fdf->map[pos.i] = malloc(sizeof(t_point) * index.words);
 		if (!fdf->map[pos.i])
-			return;
+			return ;
 		index.index = 0;
 		pos.j = 0;
 		while (split_line[pos.i][pos.j])

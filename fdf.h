@@ -14,6 +14,7 @@
 # define FDF_H
 
 # include "minilibx-linux/mlx.h"
+//# include "mlx.h"
 # include <X11/X.h>
 # include <X11/keysym.h>
 # include <fcntl.h>
@@ -21,9 +22,7 @@
 # include <math.h>
 # include <stdbool.h>
 # include <stddef.h>
-# include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
 # include <unistd.h>
 
 # define BUFFER_SIZE 50
@@ -126,10 +125,10 @@ typedef struct s_index
 
 typedef struct s_scale
 {
-	float				x;
-	float				y;
-	float				z;
-	float				final;
+	float			x;
+	float			y;
+	float			z;
+	float			final;
 }					t_scale;
 
 typedef struct s_fdf
@@ -156,7 +155,7 @@ typedef struct s_fdf
 	float			rot_x;
 	float			rot_y;
 	float			trans_x;
-    float			trans_y;
+	float			trans_y;
 	t_img			logo;
 }					t_fdf;
 
@@ -203,7 +202,8 @@ void				prepare_line_coordinates(t_point *start, t_point *end,
 void				draw_line_pixel(t_fdf *fdf, t_point start, t_point end,
 						int steep);
 void				read_file(t_fdf *fdf);
-/////////////////////  dimension  and color  and  key press  hooks ///////////////
+/////////////////////  dimension  and color  and  key press  hooks
+	///////////////
 void				dimension_color(t_fdf *fdf);
 void				assign_offset(t_fdf *fdf);
 int					is_outside_window(int x, int y, int width, int height);
@@ -222,6 +222,11 @@ void				trans_key(int keysym, t_fdf *fdf);
 void				proj_key(int keysym, t_fdf *fdf);
 void				rot_key(int keysym, t_fdf *fdf);
 void				put_menu(t_fdf *fdf, int x, int y, int color);
-void 				load_menu_image(t_fdf *fdf);
-void 				draw_menu_image(t_fdf *fdf);
+void				load_menu_image(t_fdf *fdf);
+void				draw_menu_image(t_fdf *fdf);
+int					close_window(t_fdf *fdf);
+void				load_menu_image(t_fdf *fdf);
+void				ft_cleanup(t_fdf *fdf);
+void				*ft_memset(void *s, int c, size_t n);
+
 #endif

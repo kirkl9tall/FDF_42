@@ -55,21 +55,13 @@ void	projection(t_fdf *fdf)
 		while (j < fdf->width)
 		{
 			if (fdf->projection == PROJ_ISO)
-			{
 				iso_projection(fdf, i, j);
-			}
 			else if (fdf->projection == PROJ_TOP)
-			{
 				top_projection(fdf, i, j);
-			}
 			else if (fdf->projection == PROJ_SIDE)
-			{
 				side_projection(fdf, i, j);
-			}
 			else if (fdf->projection == PROJ_FRONT)
-			{
 				front_projection(fdf, i, j);
-			}
 			j++;
 		}
 		i++;
